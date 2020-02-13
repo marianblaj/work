@@ -52,6 +52,9 @@ public class ParserService {
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
+
+
+
                 Scanner scanner = new Scanner(parsedText);
                 String date = "";
 
@@ -61,14 +64,21 @@ public class ParserService {
                     if (i == 2) {
 
                         date = scanner.nextLine();
+
+
                     }
+
                 }
 
                 System.out.println(date);
-                String[] dateArr=date.split("--");
-               // System.out.println(Arrays.toString(dateArr));
-                System.out.println("Start Date --"+dateArr[0]);
-                System.out.println("End Date --"+ dateArr[1]);
+                String[] dates = date.split("\\D");
+
+
+                LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
+                LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
+
+                System.out.println("Start date in LocalDate " + startDate);
+                System.out.println("End date in LocalDate " + endDate);
 
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
                 for (String l : lines) {
@@ -86,13 +96,13 @@ public class ParserService {
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
 
-//
-//                       if(accountNumber.matches("121")) {
-//                           continue;
-//                       }
-//                       else if (!accountNumber.startsWith("1")){
-//                            break;
-//                        }
+
+                       if(accountNumber.matches("121")) {
+                           continue;
+                       }
+                       else if (!accountNumber.startsWith("1")){
+                            break;
+                        }
 
 
 //                        spdTotal = spdTotal.add(numbers.get(1));
