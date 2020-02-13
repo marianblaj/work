@@ -1,4 +1,4 @@
-package com.example.pdf_parser;
+package ro.fortech.pdfparser;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
