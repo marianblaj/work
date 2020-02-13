@@ -21,8 +21,6 @@ import java.util.Scanner;
 
 public class ParserService {
 
-
-
     public boolean importPdf() throws Exception{
        // File file = FileUtils.getFile(BL_FILENAME);
 
@@ -54,7 +52,6 @@ public class ParserService {
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
                 for (String l : lines) {
 
-
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {
 
                         List<BigDecimal> numbers = getBigDecimals(l);
@@ -66,9 +63,9 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-                        if (!accountNumber.startsWith("1")){
-                            break;
-                        }
+//                        if (!accountNumber.startsWith("1")){
+//                            break;
+//                        }
 
 //                        spdTotal = spdTotal.add(numbers.get(1));
 
@@ -129,6 +126,9 @@ public class ParserService {
         Scanner sc = new Scanner(l2);
 
         List<BigDecimal> numbers = new ArrayList<>();
+
+        if(l.charAt(0) == '1' && l.charAt(1) == '2' && l.charAt(2) == '1' && l.charAt(3) != '.')
+            return numbers;
         while (sc.hasNext()) {
             if (sc.hasNextBigDecimal()) {
                 numbers.add(sc.nextBigDecimal());

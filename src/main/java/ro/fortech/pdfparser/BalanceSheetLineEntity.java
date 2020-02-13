@@ -41,7 +41,7 @@ public class BalanceSheetLineEntity {
         return "{" +
                 "accNr='" + accNr + '\'' +
                 ", sumePrecedenteD=" + sumePrecedenteD +
-                ", sumePrecedenteC=" + sumePrecedenteC +
+                ", sumePrecedenteC=2" + sumePrecedenteC +
                 ", rulajeD=" + rulajeD +
                 ", rulajeC=" + rulajeC +
                 ", sumeTotaleD=" + sumeTotaleD +
