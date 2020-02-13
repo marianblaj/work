@@ -15,6 +15,7 @@ import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -51,7 +52,18 @@ public class ParserService {
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
+                String str = lines[3];
+                String dateFrom = str.substring(0,10);
+                String dateTo = str.substring(14,24);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+
+
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
+                balanceSheetEntity.setFrom(LocalDate.parse(dateFrom, formatter));
+                balanceSheetEntity.setTo(LocalDate.parse(dateTo, formatter));
+
                 for (String l : lines) {
 
 
@@ -70,11 +82,16 @@ public class ParserService {
                             break;
                         }
 
+
 //                        spdTotal = spdTotal.add(numbers.get(1));
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
 
+                        System.out.println("Date From " + dateFrom);
+                        System.out.println("Date To " + dateTo);
+
+                        System.out.println(str);
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
                         System.out.println(StringUtils.repeat("=", 100));
