@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -51,6 +52,24 @@ public class ParserService {
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
+                Scanner scanner = new Scanner(parsedText);
+                String date = "";
+
+
+                for (int i = 0; i < 3; i++) {
+                    scanner.nextLine();
+                    if (i == 2) {
+
+                        date = scanner.nextLine();
+                    }
+                }
+
+                System.out.println(date);
+                String[] dateArr=date.split("--");
+               // System.out.println(Arrays.toString(dateArr));
+                System.out.println("Start Date --"+dateArr[0]);
+                System.out.println("End Date --"+ dateArr[1]);
+
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
                 for (String l : lines) {
 
@@ -66,19 +85,25 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-                        if (!accountNumber.startsWith("1")){
-                            break;
-                        }
+
+//
+//                       if(accountNumber.matches("121")) {
+//                           continue;
+//                       }
+//                       else if (!accountNumber.startsWith("1")){
+//                            break;
+//                        }
+
 
 //                        spdTotal = spdTotal.add(numbers.get(1));
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
-
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
                         System.out.println(StringUtils.repeat("=", 100));
                         System.out.println();
+
                     }
                 }
 

@@ -72,7 +72,11 @@ public class BalanceSheetEntity extends BaseEntity{
     }
 
     public BigDecimal getTotal(Function<BalanceSheetLineEntity, BigDecimal> coaColumn) {
-        return lines.stream().map(coaColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return lines
+                .stream()
+                .map(coaColumn)
+                .reduce(BigDecimal
+                        .ZERO, BigDecimal::add);
     }
 
 //    public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
