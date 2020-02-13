@@ -15,6 +15,7 @@ import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -48,9 +49,35 @@ public class ParserService {
                 String parsedText = pdfStripper.getText(pdDoc);
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
-
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
+
+                String date = lines[3];
+                String dateFrom = null;
+                String dateTo = null;
+                int spaceIndex = 0;
+                for(int i = 0; i < date.length() ; i++){
+                    if(date.charAt(i) == ' ') {spaceIndex = i; break;} //spaceindex+4;
+                }
+                dateFrom = date.substring(0, spaceIndex);
+                dateTo = date.substring(spaceIndex + 4, date.length());
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+                balanceSheetEntity.setFrom(LocalDate.parse(dateFrom, formatter));
+                balanceSheetEntity.setTo(LocalDate.parse(dateTo, formatter));
+
+
+                System.out.println("DATA :");
+
+                System.out.println("Start Date " + balanceSheetEntity.getTo());
+
+                System.out.println("End Date " + balanceSheetEntity.getFrom());
+
+
+
                 for (String l : lines) {
+
+
 
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {
 
@@ -71,6 +98,10 @@ public class ParserService {
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
+
+
+
+
 
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
@@ -127,8 +158,8 @@ public class ParserService {
 
         List<BigDecimal> numbers = new ArrayList<>();
 
-        if(l.charAt(0) == '1' && l.charAt(1) == '2' && l.charAt(2) == '1' && l.charAt(3) != '.')
-            return numbers;
+
+
         while (sc.hasNext()) {
             if (sc.hasNextBigDecimal()) {
                 numbers.add(sc.nextBigDecimal());
@@ -136,7 +167,13 @@ public class ParserService {
                 sc.next();
             }
         }
+
+
         System.out.println("col: " + StringUtils.join(numbers, "|"));
+
+        List<BigDecimal> numbers2 = new ArrayList<>();
+//        if(l.charAt(0) == '1' || l.charAt(0) == '2')
+//            return numbers;
         return numbers;
     }
 }
