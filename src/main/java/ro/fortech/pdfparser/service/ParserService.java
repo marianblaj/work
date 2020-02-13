@@ -15,6 +15,7 @@ import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -52,6 +53,15 @@ public class ParserService {
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+                String date = lines[3];
+                String dateFrom = date.substring(0,10);
+                String dateTo = date.substring(14,24);
+
+                balanceSheetEntity.setFrom(LocalDate.parse(dateFrom, formatter));
+                balanceSheetEntity.setTo(LocalDate.parse(dateTo, formatter));
+
                 for (String l : lines) {
 
 
@@ -66,15 +76,14 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-                        if (!accountNumber.startsWith("1")){
-                            break;
-                        }
 
 //                        spdTotal = spdTotal.add(numbers.get(1));
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
 
+                        System.out.println("Start date: "+balanceSheetEntity.getFrom());
+                        System.out.println("End date: "+balanceSheetEntity.getTo());
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
                         System.out.println(StringUtils.repeat("=", 100));
@@ -99,19 +108,20 @@ public class ParserService {
     private BalanceSheetLineEntity createLine(BalanceSheetEntity balanceSheetEntity, List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();
 
-        BalanceSheetLineEntity line = new BalanceSheetLineEntity();
-        line.setAccNr(accountNumber);
-        line.setBalanceSheet(balanceSheetEntity);
-        line.setSumePrecedenteD(numbers.get(1));
-        line.setSumePrecedenteC(numbers.get(2));
-        line.setRulajeD(numbers.get(3));
-        line.setRulajeC(numbers.get(4));
-        line.setSumeTotaleD(numbers.get(5));
-        line.setSumeTotaleC(numbers.get(6));
-        line.setSolduriFinaleD(numbers.get(7));
-        line.setSolduriFinaleC(numbers.get(8));
+    BalanceSheetLineEntity line = new BalanceSheetLineEntity();
+    line.setAccNr(accountNumber);
+    line.setBalanceSheet(balanceSheetEntity);
+    line.setSumePrecedenteD(numbers.get(1));
+    line.setSumePrecedenteC(numbers.get(2));
+    line.setRulajeD(numbers.get(3));
+    line.setRulajeC(numbers.get(4));
+    line.setSumeTotaleD(numbers.get(5));
+    line.setSumeTotaleC(numbers.get(6));
+    line.setSolduriFinaleD(numbers.get(7));
+    line.setSolduriFinaleC(numbers.get(8));
 
-        return line;
+    return line;
+
     }
 
 //    private BalanceSheetEntity create() {
