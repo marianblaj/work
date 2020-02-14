@@ -39,12 +39,12 @@ public class BalanceSheetEntity extends BaseEntity{
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
 
-    public BigDecimal getTotalSumePrecedenteD() {
-        return getTotal(BalanceSheetLineEntity::getSumePrecedenteD);
+    public BigDecimal getTotalSolduriInitialeD() {
+        return getTotal(BalanceSheetLineEntity::getSolduriInitialeD);
     }
 
-    public BigDecimal getTotalSumePrecedenteC() {
-        return getTotal(BalanceSheetLineEntity::getSumePrecedenteC);
+    public BigDecimal getTotalSolduriInitialeC() {
+        return getTotal(BalanceSheetLineEntity::getSolduriInitialeC);
     }
 
     public BigDecimal getTotalRulajeD() {
@@ -54,6 +54,15 @@ public class BalanceSheetEntity extends BaseEntity{
     public BigDecimal getTotalRulajeC() {
         return getTotal(BalanceSheetLineEntity::getRulajeC);
     }
+
+    public BigDecimal getTotalTotalRulajeD() {
+        return getTotal(BalanceSheetLineEntity::getTotalRulajeD);
+    }
+
+    public BigDecimal getTotalTotalRulajeC() {
+        return getTotal(BalanceSheetLineEntity::getTotalRulajeC);
+    }
+
 
     public BigDecimal getTotalSumeTotaleD() {
         return getTotal(BalanceSheetLineEntity::getSumeTotaleD);
@@ -72,7 +81,11 @@ public class BalanceSheetEntity extends BaseEntity{
     }
 
     public BigDecimal getTotal(Function<BalanceSheetLineEntity, BigDecimal> coaColumn) {
-        return lines.stream().map(coaColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return lines
+                .stream()
+                .map(coaColumn)
+                .reduce(BigDecimal
+                        .ZERO, BigDecimal::add);
     }
 
 //    public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
@@ -83,10 +96,12 @@ public class BalanceSheetEntity extends BaseEntity{
     @Override
     public String toString() {
         return "{" +
-                "totalSumePrecedenteD=" + getTotalSumePrecedenteD() +
-                ", totalSumePrecedenteC=" + getTotalSumePrecedenteC() +
+                "totalSumePrecedenteD=" + getTotalSolduriInitialeD() +
+                ", totalSumePrecedenteC=" + getTotalSolduriInitialeC() +
                 ", totalRulajeD=" + getTotalRulajeD() +
                 ", totalRulajeC=" + getTotalRulajeC() +
+                ", totalTotalRulajeD=" + getTotalTotalRulajeD() +
+                ", totalTotalRulajeC=" + getTotalTotalRulajeC() +
                 ", totalSumeTotaleD=" + getTotalSumeTotaleD() +
                 ", totalSumeTotaleC=" + getTotalSumeTotaleC() +
                 ", totalSolduriFinaleD=" + getTotalSolduriFinaleD() +

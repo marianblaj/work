@@ -15,12 +15,14 @@ import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class ParserService {
+
+
 
     public boolean importPdf() throws Exception{
        // File file = FileUtils.getFile(BL_FILENAME);
@@ -49,34 +51,37 @@ public class ParserService {
                 String parsedText = pdfStripper.getText(pdDoc);
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
-                BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
 
-                String date = lines[3];
-                String dateFrom = null;
-                String dateTo = null;
-                int spaceIndex = 0;
-                for(int i = 0; i < date.length() ; i++){
-                    if(date.charAt(i) == ' ') {spaceIndex = i; break;} //spaceindex+4;
+
+
+
+                Scanner scanner = new Scanner(parsedText);
+                String date = "";
+
+
+                for (int i = 0; i < 3; i++) {
+                    scanner.nextLine();
+                    if (i == 2) {
+
+                        date = scanner.nextLine();
+
+
+                    }
+
                 }
-                dateFrom = date.substring(0, spaceIndex);
-                dateTo = date.substring(spaceIndex + 4, date.length());
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-                balanceSheetEntity.setFrom(LocalDate.parse(dateFrom, formatter));
-                balanceSheetEntity.setTo(LocalDate.parse(dateTo, formatter));
+                System.out.println(date);
+                String[] dates = date.split("\\D");
 
 
-                System.out.println("DATA :");
+                LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
+                LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
 
-                System.out.println("Start Date " + balanceSheetEntity.getTo());
+                System.out.println("Start date in LocalDate " + startDate);
+                System.out.println("End date in LocalDate " + endDate);
 
-                System.out.println("End Date " + balanceSheetEntity.getFrom());
-
-
-
+                BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
                 for (String l : lines) {
-
 
 
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {
@@ -90,23 +95,25 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-//                        if (!accountNumber.startsWith("1")){
-//                            break;
-//                        }
+
+
+                       if(accountNumber.matches("121")) {
+                           continue;
+                       }
+                       else if (!accountNumber.startsWith("1")){
+                            break;
+                        }
+
 
 //                        spdTotal = spdTotal.add(numbers.get(1));
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
-
-
-
-
-
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
                         System.out.println(StringUtils.repeat("=", 100));
                         System.out.println();
+
                     }
                 }
 
@@ -130,14 +137,16 @@ public class ParserService {
         BalanceSheetLineEntity line = new BalanceSheetLineEntity();
         line.setAccNr(accountNumber);
         line.setBalanceSheet(balanceSheetEntity);
-        line.setSumePrecedenteD(numbers.get(1));
-        line.setSumePrecedenteC(numbers.get(2));
+        line.setSolduriInitialeD(numbers.get(1));
+        line.setSolduriInitialeC(numbers.get(2));
         line.setRulajeD(numbers.get(3));
         line.setRulajeC(numbers.get(4));
-        line.setSumeTotaleD(numbers.get(5));
-        line.setSumeTotaleC(numbers.get(6));
-        line.setSolduriFinaleD(numbers.get(7));
-        line.setSolduriFinaleC(numbers.get(8));
+        line.setTotalRulajeD(numbers.get(5));
+        line.setTotalRulajeC(numbers.get(6));
+        line.setSumeTotaleD(numbers.get(7));
+        line.setSumeTotaleC(numbers.get(8));
+        line.setSolduriFinaleD(numbers.get(9));
+        line.setSolduriFinaleC(numbers.get(10));
 
         return line;
     }
@@ -157,9 +166,6 @@ public class ParserService {
         Scanner sc = new Scanner(l2);
 
         List<BigDecimal> numbers = new ArrayList<>();
-
-
-
         while (sc.hasNext()) {
             if (sc.hasNextBigDecimal()) {
                 numbers.add(sc.nextBigDecimal());
@@ -167,13 +173,7 @@ public class ParserService {
                 sc.next();
             }
         }
-
-
         System.out.println("col: " + StringUtils.join(numbers, "|"));
-
-        List<BigDecimal> numbers2 = new ArrayList<>();
-//        if(l.charAt(0) == '1' || l.charAt(0) == '2')
-//            return numbers;
         return numbers;
     }
 }
