@@ -27,10 +27,12 @@ public class BalanceSheetLineEntity {
 
 
     private String accNr;
-    private BigDecimal sumePrecedenteD;
-    private BigDecimal sumePrecedenteC;
+    private BigDecimal solduriInitialeD;
+    private BigDecimal solduriInitialeC;
     private BigDecimal rulajeD;
     private BigDecimal rulajeC;
+    private BigDecimal totalRulajeD;
+    private BigDecimal totalRulajeC;
     private BigDecimal sumeTotaleD;
     private BigDecimal sumeTotaleC;
     private BigDecimal solduriFinaleD;
@@ -38,12 +40,14 @@ public class BalanceSheetLineEntity {
 
     @Override
     public String toString() {
-        return "{" +
+        return "BalanceSheetLineEntity{" +
                 "accNr='" + accNr + '\'' +
-                ", sumePrecedenteD=" + sumePrecedenteD +
-                ", sumePrecedenteC=" + sumePrecedenteC +
+                ", solduriInitialeD=" + solduriInitialeD +
+                ", solduriInitialeC=" + solduriInitialeC +
                 ", rulajeD=" + rulajeD +
                 ", rulajeC=" + rulajeC +
+                ", totalRulajeD=" + totalRulajeD +
+                ", totalRulajeC=" + totalRulajeC +
                 ", sumeTotaleD=" + sumeTotaleD +
                 ", sumeTotaleC=" + sumeTotaleC +
                 ", solduriFinaleD=" + solduriFinaleD +

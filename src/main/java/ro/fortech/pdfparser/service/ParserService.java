@@ -15,8 +15,8 @@ import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,18 +52,35 @@ public class ParserService {
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
-                String str = lines[3];
-                String dateFrom = str.substring(0,10);
-                String dateTo = str.substring(14,24);
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
 
+
+                Scanner scanner = new Scanner(parsedText);
+                String date = "";
+
+
+                for (int i = 0; i < 3; i++) {
+                    scanner.nextLine();
+                    if (i == 2) {
+
+                        date = scanner.nextLine();
+
+
+                    }
+
+                }
+
+                System.out.println(date);
+                String[] dates = date.split("\\D");
+
+
+                LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
+                LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
+
+                System.out.println("Start date in LocalDate " + startDate);
+                System.out.println("End date in LocalDate " + endDate);
 
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
-                balanceSheetEntity.setFrom(LocalDate.parse(dateFrom, formatter));
-                balanceSheetEntity.setTo(LocalDate.parse(dateTo, formatter));
-
                 for (String l : lines) {
 
 
@@ -78,7 +95,12 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-                        if (!accountNumber.startsWith("1")){
+
+
+                       if(accountNumber.matches("121")) {
+                           continue;
+                       }
+                       else if (!accountNumber.startsWith("1")){
                             break;
                         }
 
@@ -87,15 +109,11 @@ public class ParserService {
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
-
-                        System.out.println("Date From " + dateFrom);
-                        System.out.println("Date To " + dateTo);
-
-                        System.out.println(str);
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
                         System.out.println(StringUtils.repeat("=", 100));
                         System.out.println();
+
                     }
                 }
 
@@ -119,14 +137,16 @@ public class ParserService {
         BalanceSheetLineEntity line = new BalanceSheetLineEntity();
         line.setAccNr(accountNumber);
         line.setBalanceSheet(balanceSheetEntity);
-        line.setSumePrecedenteD(numbers.get(1));
-        line.setSumePrecedenteC(numbers.get(2));
+        line.setSolduriInitialeD(numbers.get(1));
+        line.setSolduriInitialeC(numbers.get(2));
         line.setRulajeD(numbers.get(3));
         line.setRulajeC(numbers.get(4));
-        line.setSumeTotaleD(numbers.get(5));
-        line.setSumeTotaleC(numbers.get(6));
-        line.setSolduriFinaleD(numbers.get(7));
-        line.setSolduriFinaleC(numbers.get(8));
+        line.setTotalRulajeD(numbers.get(5));
+        line.setTotalRulajeC(numbers.get(6));
+        line.setSumeTotaleD(numbers.get(7));
+        line.setSumeTotaleC(numbers.get(8));
+        line.setSolduriFinaleD(numbers.get(9));
+        line.setSolduriFinaleC(numbers.get(10));
 
         return line;
     }
