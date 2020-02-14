@@ -8,8 +8,9 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.core.io.ClassPathResource;
-import ro.fortech.pdfparser.BalanceSheetEntity;
-import ro.fortech.pdfparser.BalanceSheetLineEntity;
+import ro.fortech.pdfparser.entity.BalanceSheetEntity;
+import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
+import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -20,6 +21,14 @@ import java.util.Scanner;
 
 public class ParserService {
 
+    private BalanceSheetRepository repository;
+
+    public ParserService(BalanceSheetRepository repository) {
+        this.repository = repository;
+    }
+
+    public ParserService() {
+    }
 
     public boolean importPdf() throws Exception {
         // File file = FileUtils.getFile(BL_FILENAME);
@@ -30,8 +39,15 @@ public class ParserService {
         parse(in);
         return true;
     }
-    private String numeFirma ="";
+
+    List<BalanceSheetLineEntity> linesToSave = new ArrayList<>();
+    List<BigDecimal> numbers = new ArrayList<>();
+    BalanceSheetLineEntity line = new BalanceSheetLineEntity();
+    private String numeFirma = "";
     private String cif;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private ArrayList<BalanceSheetLineEntity> listaMea;
 
     public void parse(InputStream file) {
         try {
@@ -56,7 +72,7 @@ public class ParserService {
                 String date = "";
 
 
-                String firma =lines[0];
+                String firma = lines[0];
                 for (int i = 0; i < 3; i++) {
                     scanner.nextLine();
                     if (i == 2) {
@@ -67,16 +83,16 @@ public class ParserService {
                 }
                 System.out.println(firma);
 
-               numeFirma = firma.substring(0, firma.indexOf("c.f."));
-               cif=firma.substring(firma.indexOf("RO"),firma.indexOf("r.c."));
+                numeFirma = firma.substring(0, firma.indexOf("c.f."));
+                cif = firma.substring(firma.indexOf("RO"), firma.indexOf("r.c."));
 
 
                 System.out.println(date);
                 String[] dates = date.split("\\D");
 
 
-                LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
-                LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
+                startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
+                endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
 
                 System.out.println("Start date in LocalDate " + startDate);
                 System.out.println("End date in LocalDate " + endDate);
@@ -94,11 +110,12 @@ public class ParserService {
 
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {
 
-                        List<BigDecimal> numbers = getBigDecimals(l);
+                        numbers = getBigDecimals(l);
                         if (numbers.size() < 9) {
 
                             System.out.println("Not parsed: " + l);
                             System.out.println("Not parsed: " + numbers);
+
 
                             continue;
                         }
@@ -116,6 +133,7 @@ public class ParserService {
 //                     spdTotal = spdTotal.add(numbers.get(1));
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
+
                         balanceSheetEntity.getLines().add(line);
 
                         System.out.println("Line: " + l);
@@ -152,9 +170,9 @@ public class ParserService {
     private BalanceSheetLineEntity createLine(BalanceSheetEntity balanceSheetEntity, List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();
 
-        BalanceSheetLineEntity line = new BalanceSheetLineEntity();
+
         line.setAccNr(accountNumber);
-        line.setBalanceSheet(balanceSheetEntity);
+
         line.setSolduriInitialeD(numbers.get(1));
         line.setSolduriInitialeC(numbers.get(2));
         line.setRulajeD(numbers.get(3));
@@ -167,17 +185,25 @@ public class ParserService {
         line.setSolduriFinaleC(numbers.get(10));
 
 
+
         return line;
     }
 
-    private BalanceSheetEntity create() {
-        BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
-        balanceSheetEntity.setFrom(LocalDate.of(2016, 9, 1));
-        balanceSheetEntity.setTo(LocalDate.of(2016, 9, 30));
-        balanceSheetEntity.setCf(cif);
-        balanceSheetEntity.setNumeFirma(numeFirma);
-        return balanceSheetEntity;
-    }
+
+
+//    public BalanceSheetEntity create() {
+//        String accountNumber = numbers.get(0).toPlainString().trim();
+//        BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
+//        balanceSheetEntity.setFrom(startDate);
+//        balanceSheetEntity.setTo(endDate);
+//        balanceSheetEntity.setCf(cif);
+//        balanceSheetEntity.setNumeFirma(numeFirma);
+//       // balanceSheetEntity.setLines(listaMea);
+//
+//
+//
+//        return repository.save(balanceSheetEntity);
+//    }
 
 
     private List<BigDecimal> getBigDecimals(String l) {

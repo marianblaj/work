@@ -8,5 +8,6 @@ class ParserServiceTest {
     @Test
     void importPdf() throws Exception {
         new ParserService().importPdf();
+        //new ParserService().create();
     }
 }

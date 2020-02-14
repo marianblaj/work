@@ -1,6 +1,4 @@
-package ro.fortech.pdfparser;
-
-import lombok.Data;
+package ro.fortech.pdfparser.entity;
 
 
 import lombok.Getter;
@@ -27,6 +25,35 @@ public class BalanceSheetEntity extends BaseEntity{
     @Id
     @GeneratedValue
      private long id;
+
+    public LocalDate getFrom() {
+        return from;
+    }
+
+    public void setFrom(LocalDate from) {
+        this.from = from;
+    }
+
+    public LocalDate getTo() {
+        return to;
+    }
+
+    public void setTo(LocalDate to) {
+        this.to = to;
+    }
+
+    public List<BalanceSheetLineEntity> getLines() {
+        return lines;
+    }
+
+    @NotNull
+    @Column(name = "nume_firma", nullable = false, updatable = false)
+    private String numeFirma;
+
+    @NotNull
+    @Column(name = "cod_fiscal", nullable = false, updatable = false)
+    private String cf;
+
     @NotNull
     @Column(name = "from_date", nullable = false, updatable = false)
     private LocalDate from;
@@ -39,8 +66,11 @@ public class BalanceSheetEntity extends BaseEntity{
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
 
-    private String numeFirma;
-    private String cf;
+
+
+    public void setLines(List<BalanceSheetLineEntity> lines) {
+        this.lines = lines;
+    }
 
     public String getNumeFirma() {
         return numeFirma;
@@ -105,7 +135,7 @@ public class BalanceSheetEntity extends BaseEntity{
                 .reduce(BigDecimal
                         .ZERO, BigDecimal::add);
     }
-
+//
 //    public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
 //        return lines.stream().filter(a -> a.getAccountIFRS().getAccount().equalsIgnoreCase(account)).map(balanceColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }

@@ -1,4 +1,4 @@
-package ro.fortech.pdfparser;
+package ro.fortech.pdfparser.entity;
 
 
 import com.sun.istack.NotNull;
