@@ -10,16 +10,13 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.core.io.ClassPathResource;
 import ro.fortech.pdfparser.BalanceSheetEntity;
 import ro.fortech.pdfparser.BalanceSheetLineEntity;
-import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.zip.GZIPOutputStream;
 
 public class ParserService {
 
@@ -33,6 +30,8 @@ public class ParserService {
         parse(in);
         return true;
     }
+    private String numeFirma ="";
+    private String cif;
 
     public void parse(InputStream file) {
         try {
@@ -57,16 +56,20 @@ public class ParserService {
                 String date = "";
 
 
+                String firma =lines[0];
                 for (int i = 0; i < 3; i++) {
                     scanner.nextLine();
                     if (i == 2) {
 
                         date = scanner.nextLine();
-
-
                     }
 
                 }
+                System.out.println(firma);
+
+               numeFirma = firma.substring(0, firma.indexOf("c.f."));
+               cif=firma.substring(firma.indexOf("RO"),firma.indexOf("r.c."));
+
 
                 System.out.println(date);
                 String[] dates = date.split("\\D");
@@ -80,6 +83,12 @@ public class ParserService {
 
 
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
+                balanceSheetEntity.setCf(cif);
+                balanceSheetEntity.setNumeFirma(numeFirma);
+                System.out.println(balanceSheetEntity.getNumeFirma());
+                System.out.println(balanceSheetEntity.getCf());
+
+
                 for (String l : lines) {
 
 
@@ -161,12 +170,14 @@ public class ParserService {
         return line;
     }
 
-//    private BalanceSheetEntity create() {
-//        BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
-//        balanceSheetEntity.setFrom(LocalDate.of(2016, 9, 1));
-//        balanceSheetEntity.setTo(LocalDate.of(2016, 9, 30));
-//        return balanceSheetRepository.save(balanceSheetEntity);
-//    }
+    private BalanceSheetEntity create() {
+        BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
+        balanceSheetEntity.setFrom(LocalDate.of(2016, 9, 1));
+        balanceSheetEntity.setTo(LocalDate.of(2016, 9, 30));
+        balanceSheetEntity.setCf(cif);
+        balanceSheetEntity.setNumeFirma(numeFirma);
+        return balanceSheetEntity;
+    }
 
 
     private List<BigDecimal> getBigDecimals(String l) {

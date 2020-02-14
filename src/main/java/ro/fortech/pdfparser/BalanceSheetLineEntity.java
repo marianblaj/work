@@ -38,6 +38,9 @@ public class BalanceSheetLineEntity {
     private BigDecimal solduriFinaleD;
     private BigDecimal solduriFinaleC;
 
+
+
+
     @Override
     public String toString() {
         return "BalanceSheetLineEntity{" +

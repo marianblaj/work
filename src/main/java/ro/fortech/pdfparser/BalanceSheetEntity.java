@@ -39,6 +39,25 @@ public class BalanceSheetEntity extends BaseEntity{
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
 
+    private String numeFirma;
+    private String cf;
+
+    public String getNumeFirma() {
+        return numeFirma;
+    }
+
+    public void setNumeFirma(String numeFirma) {
+        this.numeFirma = numeFirma;
+    }
+
+    public String getCf() {
+        return cf;
+    }
+
+    public void setCf(String cf) {
+        this.cf = cf;
+    }
+
     public BigDecimal getTotalSumePrecedenteD() {
         return getTotal(BalanceSheetLineEntity::getSolduriInitialeD);
     }
