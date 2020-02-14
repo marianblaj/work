@@ -26,25 +26,6 @@ public class BalanceSheetEntity extends BaseEntity{
     @GeneratedValue
      private long id;
 
-    public LocalDate getFrom() {
-        return from;
-    }
-
-    public void setFrom(LocalDate from) {
-        this.from = from;
-    }
-
-    public LocalDate getTo() {
-        return to;
-    }
-
-    public void setTo(LocalDate to) {
-        this.to = to;
-    }
-
-    public List<BalanceSheetLineEntity> getLines() {
-        return lines;
-    }
 
     @NotNull
     @Column(name = "nume_firma", nullable = false, updatable = false)
@@ -62,31 +43,11 @@ public class BalanceSheetEntity extends BaseEntity{
     @Column(name = "to_date", nullable = false, updatable = false)
     private LocalDate to;
 
-    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER )
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
 
 
-
-    public void setLines(List<BalanceSheetLineEntity> lines) {
-        this.lines = lines;
-    }
-
-    public String getNumeFirma() {
-        return numeFirma;
-    }
-
-    public void setNumeFirma(String numeFirma) {
-        this.numeFirma = numeFirma;
-    }
-
-    public String getCf() {
-        return cf;
-    }
-
-    public void setCf(String cf) {
-        this.cf = cf;
-    }
 
     public BigDecimal getTotalSumePrecedenteD() {
         return getTotal(BalanceSheetLineEntity::getSolduriInitialeD);
