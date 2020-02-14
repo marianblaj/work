@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -51,6 +52,34 @@ public class ParserService {
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
+
+
+
+                Scanner scanner = new Scanner(parsedText);
+                String date = "";
+
+
+                for (int i = 0; i < 3; i++) {
+                    scanner.nextLine();
+                    if (i == 2) {
+
+                        date = scanner.nextLine();
+
+
+                    }
+
+                }
+
+                System.out.println(date);
+                String[] dates = date.split("\\D");
+
+
+                LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
+                LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
+
+                System.out.println("Start date in LocalDate " + startDate);
+                System.out.println("End date in LocalDate " + endDate);
+
                 BalanceSheetEntity balanceSheetEntity = new BalanceSheetEntity();
                 for (String l : lines) {
 
@@ -66,19 +95,25 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-                        if (!accountNumber.matches("121")){
-                            continue;
+
+
+                       if(accountNumber.matches("121")) {
+                           continue;
+                       }
+                       else if (!accountNumber.startsWith("1")){
+                            break;
                         }
+
 
 //                        spdTotal = spdTotal.add(numbers.get(1));
 
                         BalanceSheetLineEntity line = createLine(balanceSheetEntity, numbers);
                         balanceSheetEntity.getLines().add(line);
-
                         System.out.println("Line: " + l);
 //                        System.out.printf(line.toString());
                         System.out.println(StringUtils.repeat("=", 100));
                         System.out.println();
+
                     }
                 }
 
