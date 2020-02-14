@@ -80,6 +80,7 @@ public class ParserService {
                         System.out.println(StringUtils.repeat("=", 100));
                         System.out.println();
                     }
+
                 }
 
                 System.out.println(balanceSheetEntity.toString());
