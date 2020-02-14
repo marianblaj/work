@@ -1,3 +1,4 @@
+
 package ro.fortech.pdfparser;
 
 import lombok.Data;
@@ -26,7 +27,7 @@ public class BalanceSheetEntity extends BaseEntity{
 
     @Id
     @GeneratedValue
-     private long id;
+    private long id;
     @NotNull
     @Column(name = "from_date", nullable = false, updatable = false)
     private LocalDate from;
@@ -40,19 +41,27 @@ public class BalanceSheetEntity extends BaseEntity{
 
 
     public BigDecimal getTotalSumePrecedenteD() {
-        return getTotal(BalanceSheetLineEntity::getSumePrecedenteD);
+        return getTotal(BalanceSheetLineEntity::getSolduriInitialeD);
     }
 
     public BigDecimal getTotalSumePrecedenteC() {
-        return getTotal(BalanceSheetLineEntity::getSumePrecedenteC);
+        return getTotal(BalanceSheetLineEntity::getSolduriInitialeC);
     }
 
-    public BigDecimal getTotalRulajeD() {
+    public BigDecimal getRulajeD() {
         return getTotal(BalanceSheetLineEntity::getRulajeD);
     }
 
-    public BigDecimal getTotalRulajeC() {
+    public BigDecimal getRulajeC() {
         return getTotal(BalanceSheetLineEntity::getRulajeC);
+    }
+
+    public BigDecimal getTotalRulajeD() {
+        return getTotal(BalanceSheetLineEntity::getTotalRulajeD);
+    }
+
+    public BigDecimal getTotalRulajeC() {
+        return getTotal(BalanceSheetLineEntity::getTotalRulajeC);
     }
 
     public BigDecimal getTotalSumeTotaleD() {
@@ -79,16 +88,20 @@ public class BalanceSheetEntity extends BaseEntity{
                         .ZERO, BigDecimal::add);
     }
 
-//    public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
-//        return lines.stream().filter(a -> a.getAccountIFRS().getAccount().equalsIgnoreCase(account)).map(balanceColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
-//    }
+// public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
+// return lines.stream().filter(a -> a.getAccountIFRS().getAccount().equalsIgnoreCase(account)).map(balanceColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
+// }
 
 
     @Override
     public String toString() {
-        return "{" +
-                "totalSumePrecedenteD=" + getTotalSumePrecedenteD() +
+        return "BalanceSheetEntity{" +
+                "from=" + from +
+                ", to=" + to +
+                ", totalSumePrecedenteD=" + getTotalSumePrecedenteD() +
                 ", totalSumePrecedenteC=" + getTotalSumePrecedenteC() +
+                ", rulajeD=" + getRulajeD() +
+                ", rulajeC=" + getRulajeC() +
                 ", totalRulajeD=" + getTotalRulajeD() +
                 ", totalRulajeC=" + getTotalRulajeC() +
                 ", totalSumeTotaleD=" + getTotalSumeTotaleD() +

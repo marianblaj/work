@@ -22,15 +22,17 @@ public class BalanceSheetLineEntity {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "balance_sheet_id",  nullable = false)
+    @JoinColumn(name = "balance_sheet_id", nullable = false)
     private BalanceSheetEntity balanceSheet;
 
 
     private String accNr;
-    private BigDecimal sumePrecedenteD;
-    private BigDecimal sumePrecedenteC;
+    private BigDecimal solduriInitialeD;
+    private BigDecimal solduriInitialeC;
     private BigDecimal rulajeD;
     private BigDecimal rulajeC;
+    private BigDecimal totalRulajeC;
+    private BigDecimal totalRulajeD;
     private BigDecimal sumeTotaleD;
     private BigDecimal sumeTotaleC;
     private BigDecimal solduriFinaleD;
@@ -38,12 +40,15 @@ public class BalanceSheetLineEntity {
 
     @Override
     public String toString() {
-        return "{" +
-                "accNr='" + accNr + '\'' +
-                ", sumePrecedenteD=" + sumePrecedenteD +
-                ", sumePrecedenteC=" + sumePrecedenteC +
+        return "BalanceSheetLineEntity{" +
+                "balanceSheet=" + balanceSheet +
+                ", accNr='" + accNr + '\'' +
+                ", solduriInitialeD=" + solduriInitialeD +
+                ", solduriInitialeC=" + solduriInitialeC +
                 ", rulajeD=" + rulajeD +
                 ", rulajeC=" + rulajeC +
+                ", totalRulajeC=" + totalRulajeC +
+                ", totalRulajeD=" + totalRulajeD +
                 ", sumeTotaleD=" + sumeTotaleD +
                 ", sumeTotaleC=" + sumeTotaleC +
                 ", solduriFinaleD=" + solduriFinaleD +
