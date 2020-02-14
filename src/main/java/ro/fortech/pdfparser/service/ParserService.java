@@ -95,13 +95,14 @@ public class ParserService {
                         }
 
                         String accountNumber = numbers.get(0).toPlainString().trim();
-                        if (accountNumber.startsWith("1")) {
+
+                        if (accountNumber.equals("121")) {
                             continue;
-                        } else if (accountNumber.equals("121")) {
-                            continue;
-                        } else if (!accountNumber.startsWith("2")) {
+                        } else if (!accountNumber.startsWith("1"))
                             break;
-                        }
+//                        } else if (!accountNumber.startsWith("2")) {
+//                            break;
+//                        }
 
 //                     spdTotal = spdTotal.add(numbers.get(1));
 
@@ -128,6 +129,9 @@ public class ParserService {
 
                 System.out.println("Solduri FinaleD: " + balanceSheetEntity.getTotalSumeTotaleD().toPlainString());
                 System.out.println("SOlduri Finale: " + balanceSheetEntity.getTotalSolduriFinaleC().toPlainString());
+
+                System.out.println("Solduri FinaleD: " + balanceSheetEntity.getTotalSumeTotaleD().toPlainString());
+                System.out.println("SOlduri Finale: " + balanceSheetEntity.getTotalSolduriFinaleC().toPlainString());
             }
 
         } catch (Exception e) {
@@ -142,14 +146,17 @@ public class ParserService {
         BalanceSheetLineEntity line = new BalanceSheetLineEntity();
         line.setAccNr(accountNumber);
         line.setBalanceSheet(balanceSheetEntity);
-        line.setSumePrecedenteD(numbers.get(1));
-        line.setSumePrecedenteC(numbers.get(2));
+        line.setSolduriInitialeD(numbers.get(1));
+        line.setSolduriInitialeC(numbers.get(2));
         line.setRulajeD(numbers.get(3));
         line.setRulajeC(numbers.get(4));
-        line.setSumeTotaleD(numbers.get(5));
-        line.setSumeTotaleC(numbers.get(6));
-        line.setSolduriFinaleD(numbers.get(7));
-        line.setSolduriFinaleC(numbers.get(8));
+        line.setTotalRulajeD(numbers.get(5));
+        line.setTotalRulajeC(numbers.get(6));
+        line.setSumeTotaleD(numbers.get(7));
+        line.setSumeTotaleC(numbers.get(8));
+        line.setSolduriFinaleD(numbers.get(9));
+        line.setSolduriFinaleC(numbers.get(10));
+
 
         return line;
     }

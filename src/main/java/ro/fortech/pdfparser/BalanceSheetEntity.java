@@ -40,19 +40,27 @@ public class BalanceSheetEntity extends BaseEntity{
 
 
     public BigDecimal getTotalSumePrecedenteD() {
-        return getTotal(BalanceSheetLineEntity::getSumePrecedenteD);
+        return getTotal(BalanceSheetLineEntity::getSolduriInitialeD);
     }
 
     public BigDecimal getTotalSumePrecedenteC() {
-        return getTotal(BalanceSheetLineEntity::getSumePrecedenteC);
+        return getTotal(BalanceSheetLineEntity::getSolduriInitialeC);
     }
 
-    public BigDecimal getTotalRulajeD() {
+    public BigDecimal getRulajeD() {
         return getTotal(BalanceSheetLineEntity::getRulajeD);
     }
 
-    public BigDecimal getTotalRulajeC() {
+    public BigDecimal getRulajeC() {
         return getTotal(BalanceSheetLineEntity::getRulajeC);
+    }
+
+    public BigDecimal getTotalRulajeD() {
+        return getTotal(BalanceSheetLineEntity::getTotalRulajeD);
+    }
+
+    public BigDecimal getTotalRulajeC() {
+        return getTotal(BalanceSheetLineEntity::getTotalRulajeC);
     }
 
     public BigDecimal getTotalSumeTotaleD() {
@@ -86,9 +94,13 @@ public class BalanceSheetEntity extends BaseEntity{
 
     @Override
     public String toString() {
-        return "{" +
-                "totalSumePrecedenteD=" + getTotalSumePrecedenteD() +
+        return "BalanceSheetEntity{" +
+                "from=" + from +
+                ", to=" + to +
+                ", totalSumePrecedenteD=" + getTotalSumePrecedenteD() +
                 ", totalSumePrecedenteC=" + getTotalSumePrecedenteC() +
+                ", rulajeD=" + getRulajeD() +
+                ", rulajeC=" + getRulajeC() +
                 ", totalRulajeD=" + getTotalRulajeD() +
                 ", totalRulajeC=" + getTotalRulajeC() +
                 ", totalSumeTotaleD=" + getTotalSumeTotaleD() +
