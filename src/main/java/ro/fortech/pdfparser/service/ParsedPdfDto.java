@@ -13,50 +13,52 @@ public class ParsedPdfDto {
 
     private String numeFirma;
 
+
+
     private String cf;
     private LocalDate from;
     private LocalDate to;
     private List<ParsedPdfLineDto> lines = new ArrayList<>();
 
 
-    public BigDecimal getTotalSumePrecedenteD() {
-        return getTotal(ParsedPdfLineDto::getSolduriInitialeD);
+    public String getNumeFirma() {
+        return numeFirma;
     }
 
-    public BigDecimal getTotalSumePrecedenteC() {
-        return getTotal(ParsedPdfLineDto::getSolduriInitialeC);
+    public void setNumeFirma(String numeFirma) {
+        this.numeFirma = numeFirma;
     }
 
-    public BigDecimal getRulajeD() {
-        return getTotal(ParsedPdfLineDto::getRulajeD);
+    public String getCf() {
+        return cf;
     }
 
-    public BigDecimal getRulajeC() {
-        return getTotal(ParsedPdfLineDto::getRulajeC);
+    public void setCf(String cf) {
+        this.cf = cf;
     }
 
-    public BigDecimal getTotalRulajeD() {
-        return getTotal(ParsedPdfLineDto::getTotalRulajeD);
+    public LocalDate getFrom() {
+        return from;
     }
 
-    public BigDecimal getTotalRulajeC() {
-        return getTotal(ParsedPdfLineDto::getTotalRulajeC);
+    public void setFrom(LocalDate from) {
+        this.from = from;
     }
 
-    public BigDecimal getTotalSumeTotaleD() {
-        return getTotal(ParsedPdfLineDto::getSumeTotaleD);
+    public LocalDate getTo() {
+        return to;
     }
 
-    public BigDecimal getTotalSumeTotaleC() {
-        return getTotal(ParsedPdfLineDto::getSumeTotaleC);
+    public void setTo(LocalDate to) {
+        this.to = to;
     }
 
-    public BigDecimal getTotalSolduriFinaleD() {
-        return getTotal(ParsedPdfLineDto::getSolduriFinaleD);
+    public List<ParsedPdfLineDto> getLines() {
+        return lines;
     }
 
-    public BigDecimal getTotalSolduriFinaleC() {
-        return getTotal(ParsedPdfLineDto::getSolduriFinaleC);
+    public void setLines(List<ParsedPdfLineDto> lines) {
+        this.lines = lines;
     }
 
     public BigDecimal getTotal(Function<ParsedPdfLineDto, BigDecimal> coaColumn) {

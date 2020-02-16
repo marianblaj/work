@@ -4,6 +4,9 @@ package ro.fortech.pdfparser.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+import ro.fortech.pdfparser.service.ParsedPdfDto;
+import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
 
 import javax.persistence.*;
@@ -14,6 +17,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 
 @Getter
 @Setter
@@ -47,46 +52,57 @@ public class BalanceSheetEntity extends BaseEntity{
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
 
-
-
-    public BigDecimal getTotalSumePrecedenteD() {
-        return getTotal(BalanceSheetLineEntity::getSolduriInitialeD);
+    public BalanceSheetEntity update(ParsedPdfDto pojo) {
+        BalanceSheetEntity bal = new BalanceSheetEntity();
+        bal.cf = pojo.getCf();
+        bal.from = pojo.getFrom();
+        bal.to = pojo.getTo();
+        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+        bal.lines = pojo.getLines()
+                .stream()
+                .map(ParsedPdfLineDto::update)
+                .collect(Collectors.toList());
+        return bal;
     }
 
-    public BigDecimal getTotalSumePrecedenteC() {
-        return getTotal(BalanceSheetLineEntity::getSolduriInitialeC);
+    public String getNumeFirma() {
+        return numeFirma;
     }
 
-    public BigDecimal getRulajeD() {
-        return getTotal(BalanceSheetLineEntity::getRulajeD);
+    public void setNumeFirma(String numeFirma) {
+        this.numeFirma = numeFirma;
     }
 
-    public BigDecimal getRulajeC() {
-        return getTotal(BalanceSheetLineEntity::getRulajeC);
+    public String getCf() {
+        return cf;
     }
 
-    public BigDecimal getTotalRulajeD() {
-        return getTotal(BalanceSheetLineEntity::getTotalRulajeD);
+    public void setCf(String cf) {
+        this.cf = cf;
     }
 
-    public BigDecimal getTotalRulajeC() {
-        return getTotal(BalanceSheetLineEntity::getTotalRulajeC);
+    public LocalDate getFrom() {
+        return from;
     }
 
-    public BigDecimal getTotalSumeTotaleD() {
-        return getTotal(BalanceSheetLineEntity::getSumeTotaleD);
+    public void setFrom(LocalDate from) {
+        this.from = from;
     }
 
-    public BigDecimal getTotalSumeTotaleC() {
-        return getTotal(BalanceSheetLineEntity::getSumeTotaleC);
+    public LocalDate getTo() {
+        return to;
     }
 
-    public BigDecimal getTotalSolduriFinaleD() {
-        return getTotal(BalanceSheetLineEntity::getSolduriFinaleD);
+    public void setTo(LocalDate to) {
+        this.to = to;
     }
 
-    public BigDecimal getTotalSolduriFinaleC() {
-        return getTotal(BalanceSheetLineEntity::getSolduriFinaleC);
+    public List<BalanceSheetLineEntity> getLines() {
+        return lines;
+    }
+
+    public void setLines(List<BalanceSheetLineEntity> lines) {
+        this.lines = lines;
     }
 
     public BigDecimal getTotal(Function<BalanceSheetLineEntity, BigDecimal> coaColumn) {
@@ -96,27 +112,13 @@ public class BalanceSheetEntity extends BaseEntity{
                 .reduce(BigDecimal
                         .ZERO, BigDecimal::add);
     }
+
+
 //
 //    public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
 //        return lines.stream().filter(a -> a.getAccountIFRS().getAccount().equalsIgnoreCase(account)).map(balanceColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
 //    }
 
 
-    @Override
-    public String toString() {
-        return "BalanceSheetEntity{" +
-                "from=" + from +
-                ", to=" + to +
-                ", totalSumePrecedenteD=" + getTotalSumePrecedenteD() +
-                ", totalSumePrecedenteC=" + getTotalSumePrecedenteC() +
-                ", rulajeD=" + getRulajeD() +
-                ", rulajeC=" + getRulajeC() +
-                ", totalRulajeD=" + getTotalRulajeD() +
-                ", totalRulajeC=" + getTotalRulajeC() +
-                ", totalSumeTotaleD=" + getTotalSumeTotaleD() +
-                ", totalSumeTotaleC=" + getTotalSumeTotaleC() +
-                ", totalSolduriFinaleD=" + getTotalSolduriFinaleD() +
-                ", totalSolduriFinaleC=" + getTotalSolduriFinaleC() +
-                '}';
-    }
+//
 }

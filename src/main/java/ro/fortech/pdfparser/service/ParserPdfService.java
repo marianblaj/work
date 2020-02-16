@@ -29,10 +29,7 @@ public class ParserPdfService {
     }
 
 
-    private String numeFirma = "";
-    private String cif;
-    private LocalDate startDate;
-    private LocalDate endDate;
+
 
 
     public ParsedPdfDto parse(InputStream file) {
@@ -48,7 +45,6 @@ public class ParserPdfService {
                 pdfStripper.setStartPage(0);
                 pdfStripper.setEndPage(pdDoc.getNumberOfPages());
 
-
                 String parsedText = pdfStripper.getText(pdDoc);
 
                 String[] lines = parsedText.split(System.lineSeparator());
@@ -57,7 +53,6 @@ public class ParserPdfService {
                 Scanner scanner = new Scanner(parsedText);
                 String date = "";
 
-
                 String firma = lines[0];
                 for (int i = 0; i < 3; i++) {
                     scanner.nextLine();
@@ -65,38 +60,28 @@ public class ParserPdfService {
 
                         date = scanner.nextLine();
                     }
-
                 }
                 System.out.println(date);
                 String[] dates = date.split("\\D");
                 System.out.println(firma);
 
-                numeFirma = firma.substring(0, firma.indexOf("c.f."));
-                cif = firma.substring(firma.indexOf("RO"), firma.indexOf("r.c."));
+                String numeFirma = firma.substring(0, firma.indexOf("c.f."));
+                String cif = firma.substring(firma.indexOf("RO"), firma.indexOf("r.c."));
 
-
-
-
-
-                startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
-                endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
+                LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
+                LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
 
                 System.out.println("Start date in LocalDate " + startDate);
                 System.out.println("End date in LocalDate " + endDate);
 
-
-
                 ParsedPdfDto dto = new ParsedPdfDto();
+
                 dto.setCf(cif);
                 dto.setNumeFirma(numeFirma);
-//                System.out.println(dto.getNumeFirma());
-//                System.out.println(dto.getCf());
                 dto.setFrom(startDate);
                 dto.setTo(endDate);
 
-
                 for (String l : lines) {
-
 
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {
 
@@ -105,7 +90,6 @@ public class ParserPdfService {
 
                             System.out.println("Not parsed: " + l);
                             System.out.println("Not parsed: " + numbers);
-
 
                             continue;
                         }
@@ -116,11 +100,6 @@ public class ParserPdfService {
                             continue;
                         } else if (!accountNumber.startsWith("1"))
                             break;
-//                        } else if (!accountNumber.startsWith("2")) {
-//                            break;
-//                        }
-
-//                     spdTotal = spdTotal.add(numbers.get(1));
 
                         ParsedPdfLineDto line = createAndSaveLine(numbers);
                         dto.getLines().add(line);
@@ -133,34 +112,35 @@ public class ParserPdfService {
                 }
 
                 System.out.println(dto.toString());
+
+
+                ParsedPdfLineDto lineDto = new ParsedPdfLineDto();
+                lineDto=dto.getLines().get(2);
                 System.out.println("Total: " + spdTotal.toPlainString());
-                System.out.println("Total SumePrecedenteD: " + dto.getTotalSumePrecedenteD().toPlainString());
-                System.out.println("Total SumePrecedenteC: " + dto.getTotalSumePrecedenteC().toPlainString());
+                System.out.println("SolduriInitialeD: " + lineDto.getSolduriInitialeD().toPlainString());
+                System.out.println("SolduriInitialeC: " + lineDto.getSolduriInitialeC().toPlainString());
 
-                System.out.println("Total RulajeD: " + dto.getTotalRulajeD().toPlainString());
-                System.out.println("Total RulajeC: " + dto.getTotalRulajeC().toPlainString());
+                System.out.println("RulajePerioadaD: " + lineDto.getRulajePerioadaD().toPlainString());
+                System.out.println("RulajePerioadaC: " + lineDto.getRulajePerioadaC().toPlainString());
 
-                System.out.println("Sume TotaleD: " + dto.getTotalSumeTotaleD().toPlainString());
-                System.out.println("Sume TotaleC: " + dto.getTotalSumeTotaleC().toPlainString());
+                System.out.println("TotalRulajeD: " + lineDto.getTotalRulajeD().toPlainString());
+                System.out.println("TotalRulajeC: " + lineDto.getTotalRulajeC().toPlainString());
 
-                System.out.println("Solduri FinaleD: " + dto.getTotalSumeTotaleD().toPlainString());
-                System.out.println("SOlduri Finale: " + dto.getTotalSolduriFinaleC().toPlainString());
+                System.out.println("SumeTotaleD: " + lineDto.getSumeTotaleD().toPlainString());
+                System.out.println("SumeTotaleC: " + lineDto.getSumeTotaleC().toPlainString());
 
-                System.out.println("Solduri FinaleD: " + dto.getTotalSumeTotaleD().toPlainString());
-                System.out.println("SOlduri Finale: " + dto.getTotalSolduriFinaleC().toPlainString());
+                System.out.println("SolduriFinaleD: " + lineDto.getSolduriFinaleD().toPlainString());
+                System.out.println("SOlduriFinaleC: " + lineDto.getSolduriFinaleC().toPlainString());
 
                 return dto;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-//            log.error(e.getMessage(), e);
         }
 
         return null;
     }
-
-
 
     private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();
@@ -171,28 +151,20 @@ public class ParserPdfService {
 
         line.setSolduriInitialeD(numbers.get(1));
         line.setSolduriInitialeC(numbers.get(2));
-        line.setRulajeD(numbers.get(3));
-        line.setRulajeC(numbers.get(4));
+        line.setRulajePerioadaD(numbers.get(3));
+        line.setRulajePerioadaC(numbers.get(4));
         line.setTotalRulajeD(numbers.get(5));
         line.setTotalRulajeC(numbers.get(6));
         line.setSumeTotaleD(numbers.get(7));
         line.setSumeTotaleC(numbers.get(8));
         line.setSolduriFinaleD(numbers.get(9));
         line.setSolduriFinaleC(numbers.get(10));
-
-
         return line;
     }
-
-
-
 
     private List<BigDecimal> getBigDecimals(String l) {
         String l2 = l.replaceAll("(\\d)\\s(\\d)", "$1$2");
         Scanner sc = new Scanner(l2);
-
-//        System.out.println("l2: " + l2);
-
 
         List<BigDecimal> numbers = new ArrayList<>();
         while (sc.hasNext()) {
