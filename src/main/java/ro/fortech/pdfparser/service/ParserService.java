@@ -25,7 +25,7 @@ public class ParserService {
 
 
     public boolean importPdf() throws Exception{
-       // File file = FileUtils.getFile(BL_FILENAME);
+        // File file = FileUtils.getFile(BL_FILENAME);
 
         InputStream in = new ClassPathResource(
                 "/2017 SAS balanta 31122017.pdf", ParserService.class.getClassLoader()).getInputStream();
@@ -97,10 +97,10 @@ public class ParserService {
                         String accountNumber = numbers.get(0).toPlainString().trim();
 
 
-                       if(accountNumber.matches("121")) {
-                           continue;
-                       }
-                       else if (!accountNumber.startsWith("1")){
+                        if(accountNumber.matches("121")) {
+                            continue;
+                        }
+                        else if (!accountNumber.startsWith("1")){
                             break;
                         }
 

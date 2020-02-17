@@ -26,7 +26,7 @@ public class BalanceSheetEntity extends BaseEntity{
 
     @Id
     @GeneratedValue
-     private long id;
+    private long id;
     @NotNull
     @Column(name = "from_date", nullable = false, updatable = false)
     private LocalDate from;
