@@ -1,17 +1,13 @@
 package ro.fortech.pdfparser.service;
 
-import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import ro.fortech.pdfparser.entity.BalanceSheetEntity;
-import ro.fortech.pdfparser.repository.BalanceSheetLineRepository;
-import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -19,25 +15,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-
-
-
-public class ParserService {
-
-    private BalanceSheetRepository balanceSheetRepository;
-    private BalanceSheetLineRepository balanceSheetLineRepository;
-
-    public ParserService(BalanceSheetRepository balanceSheetRepository) {
-        this.balanceSheetRepository = balanceSheetRepository;
-    }
-
-    public ParserService(BalanceSheetLineRepository balanceSheetLineRepository) {
-        this.balanceSheetLineRepository = balanceSheetLineRepository;
-    }
-
+public class ParserPdfService {
 
 
     public ParsedPdfDto importPdf() throws Exception {
@@ -46,8 +25,11 @@ public class ParserService {
         InputStream in = new ClassPathResource(
                 "/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
 
-        return parse(in);
+       return parse(in);
     }
+
+
+
 
 
     public ParsedPdfDto parse(InputStream file) {
@@ -75,11 +57,13 @@ public class ParserService {
                 for (int i = 0; i < 3; i++) {
                     scanner.nextLine();
                     if (i == 2) {
+
                         date = scanner.nextLine();
                     }
                 }
-
+                System.out.println(date);
                 String[] dates = date.split("\\D");
+                System.out.println(firma);
 
                 String numeFirma = firma.substring(0, firma.indexOf("c.f."));
                 String cif = firma.substring(firma.indexOf("RO"), firma.indexOf("r.c."));
@@ -87,7 +71,11 @@ public class ParserService {
                 LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
                 LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
 
+                System.out.println("Start date in LocalDate " + startDate);
+                System.out.println("End date in LocalDate " + endDate);
+
                 ParsedPdfDto dto = new ParsedPdfDto();
+
                 dto.setCf(cif);
                 dto.setNumeFirma(numeFirma);
                 dto.setFrom(startDate);
@@ -99,6 +87,10 @@ public class ParserService {
 
                         List<BigDecimal> numbers = getBigDecimals(l);
                         if (numbers.size() < 9) {
+
+                            System.out.println("Not parsed: " + l);
+                            System.out.println("Not parsed: " + numbers);
+
                             continue;
                         }
 
@@ -111,19 +103,34 @@ public class ParserService {
 
                         ParsedPdfLineDto line = createAndSaveLine(numbers);
                         dto.getLines().add(line);
+
+                        System.out.println("Line: " + l);
+//                        System.out.printf(line.toString());
+                        System.out.println(StringUtils.repeat("=", 100));
                         System.out.println();
                     }
-
                 }
 
-               BalanceSheetEntity updatedDto = new BalanceSheetEntity();
-               updatedDto = update(dto);
-
-               balanceSheetRepository.save(updatedDto);
+                System.out.println(dto.toString());
 
 
                 ParsedPdfLineDto lineDto = new ParsedPdfLineDto();
                 lineDto=dto.getLines().get(2);
+                System.out.println("Total: " + spdTotal.toPlainString());
+                System.out.println("SolduriInitialeD: " + lineDto.getSolduriInitialeD().toPlainString());
+                System.out.println("SolduriInitialeC: " + lineDto.getSolduriInitialeC().toPlainString());
+
+                System.out.println("RulajePerioadaD: " + lineDto.getRulajePerioadaD().toPlainString());
+                System.out.println("RulajePerioadaC: " + lineDto.getRulajePerioadaC().toPlainString());
+
+                System.out.println("TotalRulajeD: " + lineDto.getTotalRulajeD().toPlainString());
+                System.out.println("TotalRulajeC: " + lineDto.getTotalRulajeC().toPlainString());
+
+                System.out.println("SumeTotaleD: " + lineDto.getSumeTotaleD().toPlainString());
+                System.out.println("SumeTotaleC: " + lineDto.getSumeTotaleC().toPlainString());
+
+                System.out.println("SolduriFinaleD: " + lineDto.getSolduriFinaleD().toPlainString());
+                System.out.println("SOlduriFinaleC: " + lineDto.getSolduriFinaleC().toPlainString());
 
                 return dto;
             }
@@ -141,6 +148,7 @@ public class ParserService {
         ParsedPdfLineDto line = new ParsedPdfLineDto();
 
         line.setAccNr(accountNumber);
+
         line.setSolduriInitialeD(numbers.get(1));
         line.setSolduriInitialeC(numbers.get(2));
         line.setRulajePerioadaD(numbers.get(3));
@@ -153,6 +161,7 @@ public class ParserService {
         line.setSolduriFinaleC(numbers.get(10));
         return line;
     }
+
     private List<BigDecimal> getBigDecimals(String l) {
         String l2 = l.replaceAll("(\\d)\\s(\\d)", "$1$2");
         Scanner sc = new Scanner(l2);
@@ -166,20 +175,8 @@ public class ParserService {
                 sc.next();
             }
         }
-        return numbers;
-    }
+        System.out.println("col: " + StringUtils.join(numbers, "|"));
 
-    public BalanceSheetEntity update(ParsedPdfDto pojo) {
-        BalanceSheetEntity bal = new BalanceSheetEntity();
-        bal.setNumeFirma(pojo.getNumeFirma());
-        bal.setCf(pojo.getCf());
-        bal.setFrom(pojo.getFrom());
-        bal.setTo(pojo.getTo());
-        bal.setLines(pojo.getLines()
-                .stream()
-                .map(ParsedPdfLineDto::update)
-                .collect(Collectors.toList())) ;
-        //System.out.println(bal.getLines().get(0));
-        return bal;
+        return numbers;
     }
 }
