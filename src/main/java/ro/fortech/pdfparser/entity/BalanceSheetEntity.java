@@ -24,17 +24,17 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "ifrs_balance_sheets")
-public class BalanceSheetEntity extends BaseEntity{
+@Table(name = "balance_sheets")
+public class BalanceSheetEntity extends BaseEntity {
 
     @Id
     @GeneratedValue
-     private long id;
+    private long id;
 
 
     @NotNull
     @Column(name = "nume_firma", nullable = false, updatable = false)
-    private String numeFirma;
+    private  String numeFirma;
 
     @NotNull
     @Column(name = "cod_fiscal", nullable = false, updatable = false)
@@ -48,7 +48,7 @@ public class BalanceSheetEntity extends BaseEntity{
     @Column(name = "to_date", nullable = false, updatable = false)
     private LocalDate to;
 
-    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER )
+    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER)
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
 
@@ -65,45 +65,19 @@ public class BalanceSheetEntity extends BaseEntity{
         return bal;
     }
 
-    public String getNumeFirma() {
-        return numeFirma;
+
+    public static ParsedPdfDto toDto(BalanceSheetEntity balanceSheetEntity) {
+        ParsedPdfDto parsedPdfDto = new ParsedPdfDto();
+        parsedPdfDto.setNumeFirma(balanceSheetEntity.numeFirma);
+        parsedPdfDto.setCf(balanceSheetEntity.cf);
+        parsedPdfDto.setFrom(balanceSheetEntity.from);
+        parsedPdfDto.setTo(balanceSheetEntity.to);
+        ParsedPdfLineDto parsedPdfLineDto = new ParsedPdfLineDto();
+        parsedPdfDto.setLines(parsedPdfLineDto.toDto(balanceSheetEntity.getLines()));
+
+        return parsedPdfDto;
     }
 
-    public void setNumeFirma(String numeFirma) {
-        this.numeFirma = numeFirma;
-    }
-
-    public String getCf() {
-        return cf;
-    }
-
-    public void setCf(String cf) {
-        this.cf = cf;
-    }
-
-    public LocalDate getFrom() {
-        return from;
-    }
-
-    public void setFrom(LocalDate from) {
-        this.from = from;
-    }
-
-    public LocalDate getTo() {
-        return to;
-    }
-
-    public void setTo(LocalDate to) {
-        this.to = to;
-    }
-
-    public List<BalanceSheetLineEntity> getLines() {
-        return lines;
-    }
-
-    public void setLines(List<BalanceSheetLineEntity> lines) {
-        this.lines = lines;
-    }
 
     public BigDecimal getTotal(Function<BalanceSheetLineEntity, BigDecimal> coaColumn) {
         return lines

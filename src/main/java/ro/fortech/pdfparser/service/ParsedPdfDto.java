@@ -1,14 +1,20 @@
 package ro.fortech.pdfparser.service;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.function.Function;
 
-@Data
+@Getter
+@Setter
 public class ParsedPdfDto {
 
     private String numeFirma;
@@ -19,47 +25,6 @@ public class ParsedPdfDto {
     private LocalDate from;
     private LocalDate to;
     private List<ParsedPdfLineDto> lines = new ArrayList<>();
-
-
-    public String getNumeFirma() {
-        return numeFirma;
-    }
-
-    public void setNumeFirma(String numeFirma) {
-        this.numeFirma = numeFirma;
-    }
-
-    public String getCf() {
-        return cf;
-    }
-
-    public void setCf(String cf) {
-        this.cf = cf;
-    }
-
-    public LocalDate getFrom() {
-        return from;
-    }
-
-    public void setFrom(LocalDate from) {
-        this.from = from;
-    }
-
-    public LocalDate getTo() {
-        return to;
-    }
-
-    public void setTo(LocalDate to) {
-        this.to = to;
-    }
-
-    public List<ParsedPdfLineDto> getLines() {
-        return lines;
-    }
-
-    public void setLines(List<ParsedPdfLineDto> lines) {
-        this.lines = lines;
-    }
 
     public BigDecimal getTotal(Function<ParsedPdfLineDto, BigDecimal> coaColumn) {
         return lines

@@ -9,8 +9,9 @@ import ro.fortech.pdfparser.service.ParserService;
 class ParserServiceTest {
 
     @Test
-    void importPdf() throws Exception {
+    void importPdf(String path) throws Exception {
         //new ParserPdfService().importPdf();
-        new ParserService().importPdf();
+
+        //  new ParserService().importPdf(path);
     }
 }

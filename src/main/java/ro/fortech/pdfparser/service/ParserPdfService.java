@@ -81,6 +81,7 @@ public class ParserPdfService {
                 dto.setFrom(startDate);
                 dto.setTo(endDate);
 
+
                 for (String l : lines) {
 
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {

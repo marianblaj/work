@@ -4,7 +4,9 @@ package ro.fortech.pdfparser.entity;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
@@ -14,18 +16,20 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "ifrs_balance_sheet_lines")
 public class BalanceSheetLineEntity {
 
     @Id
-    private int id;
+    @GeneratedValue
+    private long id;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "balance_sheet_id",  nullable = false)
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "balance_sheets_id", nullable = true)
     private BalanceSheetEntity balanceSheet;
 
 
@@ -42,10 +46,9 @@ public class BalanceSheetLineEntity {
     private BigDecimal solduriFinaleC;
 
 
-
-
     public ParsedPdfLineDto toPojo() {
         ParsedPdfLineDto pojo = new ParsedPdfLineDto();
+        this.balanceSheet = balanceSheet;
         this.solduriInitialeD = solduriInitialeD;
         this.solduriInitialeC = solduriInitialeC;
         this.rulajeD = rulajeD;
@@ -58,9 +61,6 @@ public class BalanceSheetLineEntity {
         this.solduriFinaleC = solduriFinaleC;
         return pojo;
     }
-
-
-
 
 
     public BalanceSheetEntity getBalanceSheet() {

@@ -1,7 +1,6 @@
 package ro.fortech.pdfparser.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
@@ -9,18 +8,13 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
 import ro.fortech.pdfparser.repository.BalanceSheetLineRepository;
 import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 
-import javax.swing.text.html.parser.Parser;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,26 +23,25 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 
 
-
+@Service
 public class ParserService {
 
     private BalanceSheetRepository balanceSheetRepository;
     private BalanceSheetLineRepository balanceSheetLineRepository;
 
-    public ParserService(BalanceSheetRepository balanceSheetRepository) {
+    @Autowired
+    public ParserService(BalanceSheetRepository balanceSheetRepository,BalanceSheetLineRepository balanceSheetLineRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
+        this.balanceSheetLineRepository=balanceSheetLineRepository;
     }
 
-    public ParserService(BalanceSheetLineRepository balanceSheetLineRepository) {
-        this.balanceSheetLineRepository = balanceSheetLineRepository;
+    public ParserService() {
     }
 
-
-
-    public ParsedPdfDto importPdf() throws Exception {
+    public ParsedPdfDto importPdf(String path) throws Exception {
         // File file = FileUtils.getFile(BL_FILENAME);
 
         InputStream in = new ClassPathResource(
@@ -60,8 +53,8 @@ public class ParserService {
 
     public ParsedPdfDto parse(InputStream file) {
         try {
-            PDFTextStripper pdfStripper = null;
-            PDDocument pdDoc = null;
+            PDFTextStripper pdfStripper;
+            PDDocument pdDoc;
             PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(file));
             parser.parse();
             try (COSDocument cosDoc = parser.getDocument()) {
@@ -101,6 +94,7 @@ public class ParserService {
                 dto.setFrom(startDate);
                 dto.setTo(endDate);
 
+
                 for (String l : lines) {
 
                     if (NumberUtils.isDigits(l.substring(0, Math.min(3, l.length())))) {
@@ -119,19 +113,17 @@ public class ParserService {
 
                         ParsedPdfLineDto line = createAndSaveLine(numbers);
                         dto.getLines().add(line);
-                        System.out.println();
+
                     }
 
                 }
 
-               BalanceSheetEntity updatedDto = new BalanceSheetEntity();
-               updatedDto = update(dto);
-
-               balanceSheetRepository.save(updatedDto);
+//                add(dto);
 
 
                 ParsedPdfLineDto lineDto = new ParsedPdfLineDto();
-                lineDto=dto.getLines().get(2);
+                lineDto = dto.getLines().get(2);
+                System.out.println(lineDto);
 
                 return dto;
             }
@@ -141,6 +133,27 @@ public class ParserService {
         }
 
         return null;
+    }
+
+
+    public void add(String path) throws Exception {
+        BalanceSheetEntity updatedDto;
+        updatedDto = update(importPdf(path));
+
+
+        System.out.println(updatedDto);
+
+        balanceSheetRepository.save(updatedDto);
+
+
+
+        for (int i=0;i<updatedDto.getLines().size();i++){
+            balanceSheetLineRepository.save(updatedDto.getLines().get(i));
+        }
+    }
+
+    public List<BalanceSheetEntity> getAll() {
+        return balanceSheetRepository.findAll();
     }
 
     private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
@@ -161,6 +174,7 @@ public class ParserService {
         line.setSolduriFinaleC(numbers.get(10));
         return line;
     }
+
     private List<BigDecimal> getBigDecimals(String l) {
         String l2 = l.replaceAll("(\\d)\\s(\\d)", "$1$2");
         Scanner sc = new Scanner(l2);
@@ -177,17 +191,26 @@ public class ParserService {
         return numbers;
     }
 
+
+
     public BalanceSheetEntity update(ParsedPdfDto pojo) {
         BalanceSheetEntity bal = new BalanceSheetEntity();
         bal.setNumeFirma(pojo.getNumeFirma());
         bal.setCf(pojo.getCf());
         bal.setFrom(pojo.getFrom());
         bal.setTo(pojo.getTo());
-        bal.setLines(pojo.getLines()
+        List<BalanceSheetLineEntity> balanceSheetLineEntities = pojo.getLines()
                 .stream()
                 .map(ParsedPdfLineDto::update)
-                .collect(Collectors.toList())) ;
-        //System.out.println(bal.getLines().get(0));
+                .collect(Collectors.toList());
+        balanceSheetLineEntities.forEach(balanceSheetLineEntity -> balanceSheetLineEntity.setBalanceSheet(bal));
+        bal.setLines(balanceSheetLineEntities);
+
+
+        System.out.println(bal.getLines().size() + "test---------------------");
+
         return bal;
     }
+
+
 }
