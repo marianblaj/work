@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
+import ro.fortech.pdfparser.service.refactor.PdfLines;
 
 
 import javax.persistence.*;
@@ -22,12 +23,14 @@ public class BalanceSheetLineEntity {
 
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "balance_sheet_id",  nullable = false )
     private BalanceSheetEntity balanceSheet;
+
+
 
 
     private String accNr;
@@ -59,22 +62,22 @@ public class BalanceSheetLineEntity {
         this.solduriFinaleC = solduriFinaleC;
         return pojo;
     }
-
-    public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
-        BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
-        bal.setSolduriFinaleD(pojo.getSolduriInitialeD());
-        bal.setSolduriFinaleC(pojo.getSolduriInitialeC());
-        bal.setRulajeD(pojo.getRulajePerioadaD());
-        bal.setRulajeC(pojo.getRulajePerioadaC());
-        bal.setTotalRulajeC(pojo.getTotalRulajeC());
-        bal.setTotalRulajeD(pojo.getTotalRulajeD());
-        bal.setSumeTotaleD(pojo.getSumeTotaleD());
-        bal.setSumeTotaleC(pojo.getSumeTotaleC());
-        bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
-        bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
-
-        return bal;
-    }
+//
+//    public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
+//        BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
+//        bal.setSolduriFinaleD(pojo.getSolduriInitialeD());
+//        bal.setSolduriFinaleC(pojo.getSolduriInitialeC());
+//        bal.setRulajeD(pojo.getRulajePerioadaD());
+//        bal.setRulajeC(pojo.getRulajePerioadaC());
+//        bal.setTotalRulajeC(pojo.getTotalRulajeC());
+//        bal.setTotalRulajeD(pojo.getTotalRulajeD());
+//        bal.setSumeTotaleD(pojo.getSumeTotaleD());
+//        bal.setSumeTotaleC(pojo.getSumeTotaleC());
+//        bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
+//        bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
+//
+//        return bal;
+//    }
 
 
 

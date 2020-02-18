@@ -51,6 +51,8 @@ public class BalanceSheetEntity extends  BaseEntity{
     @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER)
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
+
+
     public String getNumeFirma() {
         return numeFirma;
     }
@@ -97,7 +99,7 @@ public class BalanceSheetEntity extends  BaseEntity{
         bal.setCf(pojo.getCf());
         bal.setFrom(pojo.getFrom());
         bal.setTo(pojo.getTo());
-        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+
         bal.setLines(pojo.getLines()
                 .stream()
                 .map(ParsedPdfLineDto::update)
@@ -108,18 +110,18 @@ public class BalanceSheetEntity extends  BaseEntity{
         return bal;
     }
 
-//    public ParsedPdfDto toPojo() {
-//        ParsedPdfDto pdf = new ParsedPdfDto();
-//        pdf.setCf(cf);
-//        pdf.setFrom(from);
-//        pdf.setTo(to);
-//        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
-//        pdf.setLines(lines
-//                .stream()
-//                .map(BalanceSheetLineEntity::update)
-//                .collect(Collectors.toList()));
-//        return pdf;
-//    }
+    public ParsedPdfDto toPojo() {
+        ParsedPdfDto pdf = new ParsedPdfDto();
+        pdf.setCf(cf);
+        pdf.setFrom(from);
+        pdf.setTo(to);
+        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+        pdf.setLines(lines
+                .stream()
+                .map(BalanceSheetLineEntity::toPojo)
+                .collect(Collectors.toList()));
+        return pdf;
+    }
 
 
     //

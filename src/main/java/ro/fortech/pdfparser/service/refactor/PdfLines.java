@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.List;
+
 
 @Service
 public class PdfLines {
@@ -34,8 +36,10 @@ public class PdfLines {
                 } else if (!accountNumber.startsWith("1"))
                     break;
                 ParsedPdfLineDto line = pdfLineParser.createAndSaveLine(numbers);
+
                 dto.getLines().add(line);
             }
+
         }
         return dto;
     }

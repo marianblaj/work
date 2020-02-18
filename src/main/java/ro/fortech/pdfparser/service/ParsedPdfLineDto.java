@@ -1,6 +1,7 @@
 package ro.fortech.pdfparser.service;
 
 import lombok.Data;
+import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
 
 import java.math.BigDecimal;
@@ -46,6 +47,17 @@ public class ParsedPdfLineDto {
 
     public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
         BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
+        bal.setAccNr(pojo.getAccNr());
+
+
+
+        bal.setBalanceSheet(new BalanceSheetEntity());
+
+
+
+
+        bal.setSolduriInitialeC(pojo.getSolduriInitialeC());
+        bal.setSolduriInitialeD(pojo.getSolduriInitialeD());
         bal.setSolduriFinaleD(pojo.getSolduriInitialeD());
         bal.setSolduriFinaleC(pojo.getSolduriInitialeC());
         bal.setRulajeD(pojo.getRulajePerioadaD());
@@ -56,6 +68,10 @@ public class ParsedPdfLineDto {
         bal.setSumeTotaleC(pojo.getSumeTotaleC());
         bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
         bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
+
+
+
+
         return bal;
     }
 

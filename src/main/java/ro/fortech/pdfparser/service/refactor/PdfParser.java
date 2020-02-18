@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PdfParser {
+public class PdfParser{
 
     public PdfParser() {
     }
@@ -71,9 +71,10 @@ public class PdfParser {
                 ParsedPdfDto dto = getParsedPdfDto(numeFirma, cif, startDate, endDate);
 
 
-                ParsedPdfDto dtoFinal = pdfLines.addPdfLines(lines, dto);
+                ParsedPdfDto dtoFinal =  pdfLines.addPdfLines(lines, dto);
 
                 addPdfToDatabase(dtoFinal);
+
 
 
             }
@@ -83,7 +84,6 @@ public class PdfParser {
         }
         return null;
     }
-
     private ParsedPdfDto getParsedPdfDto(String numeFirma, String cif, LocalDate startDate, LocalDate endDate) {
         ParsedPdfDto dto = new ParsedPdfDto();
         dto.setCf(cif);
@@ -120,15 +120,15 @@ public class PdfParser {
 //        return bal;
 //    }
 
-    public void addPdfToDatabase(ParsedPdfDto parsedPdfDto) {
+    public void addPdfToDatabase(ParsedPdfDto parsedPdfDto){
 
         BalanceSheetEntity bal = new BalanceSheetEntity();
         bal = bal.toBalanceSheetEntity(parsedPdfDto);
 
 
         balanceSheetRepository.save(bal);
-        for (int i = 0; i < bal.getLines().size(); i++)
-            balanceSheetLineRepository.save(bal.getLines().get(i));
+       for (int i =0; i<bal.getLines().size() ; i++)
+        balanceSheetLineRepository.save(bal.getLines().get(i));
 
     }
 }

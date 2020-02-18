@@ -7,4 +7,5 @@ import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 public interface BalanceSheetRepository extends JpaRepository<BalanceSheetEntity, Long> {
 
 
+
 }
