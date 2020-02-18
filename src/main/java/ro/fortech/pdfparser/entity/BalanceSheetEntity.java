@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity
 @Table(name = "ifrs_balance_sheets")
-public class BalanceSheetEntity extends BaseEntity{
+public class BalanceSheetEntity extends  BaseEntity{
 
     @Id
     @GeneratedValue
@@ -48,22 +48,8 @@ public class BalanceSheetEntity extends BaseEntity{
     @Column(name = "to_date", nullable = false, updatable = false)
     private LocalDate to;
 
-    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER )
+    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER)
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
-
-
-    public BalanceSheetEntity update(ParsedPdfDto pojo) {
-        BalanceSheetEntity bal = new BalanceSheetEntity();
-        bal.cf = pojo.getCf();
-        bal.from = pojo.getFrom();
-        bal.to = pojo.getTo();
-        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
-        bal.lines = pojo.getLines()
-                .stream()
-                .map(ParsedPdfLineDto::update)
-                .collect(Collectors.toList());
-        return bal;
-    }
 
     public String getNumeFirma() {
         return numeFirma;
@@ -105,13 +91,85 @@ public class BalanceSheetEntity extends BaseEntity{
         this.lines = lines;
     }
 
-    public BigDecimal getTotal(Function<BalanceSheetLineEntity, BigDecimal> coaColumn) {
-        return lines
+    public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
+        BalanceSheetEntity bal = new BalanceSheetEntity();
+        bal.setNumeFirma(pojo.getNumeFirma());
+        bal.setCf(pojo.getCf());
+        bal.setFrom(pojo.getFrom());
+        bal.setTo(pojo.getTo());
+        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+        bal.setLines(pojo.getLines()
                 .stream()
-                .map(coaColumn)
-                .reduce(BigDecimal
-                        .ZERO, BigDecimal::add);
+                .map(ParsedPdfLineDto::update)
+                .collect(Collectors.toList()));
+        System.out.println("--------------------------");
+        System.out.println(bal.getNumeFirma());
+        System.out.println("--------------------------");
+        return bal;
     }
+
+//    public ParsedPdfDto toPojo() {
+//        ParsedPdfDto pdf = new ParsedPdfDto();
+//        pdf.setCf(cf);
+//        pdf.setFrom(from);
+//        pdf.setTo(to);
+//        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+//        pdf.setLines(lines
+//                .stream()
+//                .map(BalanceSheetLineEntity::update)
+//                .collect(Collectors.toList()));
+//        return pdf;
+//    }
+
+
+    //
+//    public String getNumeFirma() {
+//        return numeFirma;
+//    }
+//
+//    public void setNumeFirma(String numeFirma) {
+//        this.numeFirma = numeFirma;
+//    }
+//
+//    public String getCf() {
+//        return cf;
+//    }
+//
+//    public void setCf(String cf) {
+//        this.cf = cf;
+//    }
+//
+//    public LocalDate getFrom() {
+//        return from;
+//    }
+//
+//    public void setFrom(LocalDate from) {
+//        this.from = from;
+//    }
+//
+//    public LocalDate getTo() {
+//        return to;
+//    }
+//
+//    public void setTo(LocalDate to) {
+//        this.to = to;
+//    }
+//
+//    public List<BalanceSheetLineEntity> getLines() {
+//        return lines;
+//    }
+//
+//    public void setLines(List<BalanceSheetLineEntity> lines) {
+//        this.lines = lines;
+//    }
+//
+//    public BigDecimal getTotal(Function<BalanceSheetLineEntity, BigDecimal> coaColumn) {
+//        return lines
+//                .stream()
+//                .map(coaColumn)
+//                .reduce(BigDecimal
+//                        .ZERO, BigDecimal::add);
+//    }
 
 
 //

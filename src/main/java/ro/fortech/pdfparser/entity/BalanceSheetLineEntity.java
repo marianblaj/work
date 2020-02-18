@@ -21,11 +21,12 @@ import java.math.BigDecimal;
 public class BalanceSheetLineEntity {
 
     @Id
+    @GeneratedValue
     private int id;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "balance_sheet_id",  nullable = false)
+    @JoinColumn(name = "balance_sheet_id",  nullable = false )
     private BalanceSheetEntity balanceSheet;
 
 
@@ -59,7 +60,21 @@ public class BalanceSheetLineEntity {
         return pojo;
     }
 
+    public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
+        BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
+        bal.setSolduriFinaleD(pojo.getSolduriInitialeD());
+        bal.setSolduriFinaleC(pojo.getSolduriInitialeC());
+        bal.setRulajeD(pojo.getRulajePerioadaD());
+        bal.setRulajeC(pojo.getRulajePerioadaC());
+        bal.setTotalRulajeC(pojo.getTotalRulajeC());
+        bal.setTotalRulajeD(pojo.getTotalRulajeD());
+        bal.setSumeTotaleD(pojo.getSumeTotaleD());
+        bal.setSumeTotaleC(pojo.getSumeTotaleC());
+        bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
+        bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
 
+        return bal;
+    }
 
 
 

@@ -56,10 +56,6 @@ public class ParsedPdfLineDto {
         bal.setSumeTotaleC(pojo.getSumeTotaleC());
         bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
         bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
-                /*pojo.getLines()
-                .stream()
-                .map(ParsedPdfLineDto::toPojo)
-                .map(ParsedPdfLineDto::toPojo).collect(Collectors.toList());*/
         return bal;
     }
 
