@@ -1,13 +1,18 @@
 package ro.fortech.pdfparser;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import ro.fortech.pdfparser.repository.BalanceSheetRepository;
+import ro.fortech.pdfparser.service.ParserPdfService;
 import ro.fortech.pdfparser.service.ParserService;
 
 class ParserServiceTest {
 
     @Test
     void importPdf() throws Exception {
-        new ParserService().importPdf();
+        new ParserPdfService().importPdf();
+//        new ParserService().importPdf();
     }
 
 }
