@@ -43,8 +43,7 @@ public class ParserService {
     public ParsedPdfDto importPdf() throws Exception {
         // File file = FileUtils.getFile(BL_FILENAME);
 
-        InputStream in = new ClassPathResource(
-                "/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
+        InputStream in = new ClassPathResource("/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
 
         return parse(in);
     }
