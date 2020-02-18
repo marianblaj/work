@@ -1,12 +1,14 @@
-package ro.fortech.pdfparser;
+package ro.fortech.pdfparser.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public abstract class BaseEntity {
 
     @Id
     private long id;
+
 
 }
