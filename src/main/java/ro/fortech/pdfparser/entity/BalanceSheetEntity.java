@@ -4,9 +4,10 @@ package ro.fortech.pdfparser.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
+import ro.fortech.pdfparser.service.extras.ParsedPdfLineNameDto;
+import ro.fortech.pdfparser.service.extras.ParsedPdfNameDto;
 
 
 import javax.persistence.*;
@@ -84,6 +85,18 @@ public class BalanceSheetEntity{
         return pojo;
 
     }
+
+    public ParsedPdfNameDto toNamePojo() {
+        ParsedPdfNameDto pojo = new ParsedPdfNameDto();
+
+        pojo.setNumeFirma(numeFirma);
+
+        ParsedPdfLineNameDto parsedPdfLineNameDto = new ParsedPdfLineNameDto();
+        pojo.setLines(parsedPdfLineNameDto.toPojo(lines));
+
+        return pojo;
+    }
+
 
     public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
         BalanceSheetEntity bal = new BalanceSheetEntity();

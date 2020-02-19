@@ -19,7 +19,7 @@ public class ParsedPdfLineDto {
         this.accNr = accNr;
     }
 
-    private  BalanceSheetEntity balanceSheetEntity;
+    //private  BalanceSheetEntity balanceSheetEntity;
     private String accNr;
     private BigDecimal solduriInitialeD;
     private BigDecimal solduriInitialeC;

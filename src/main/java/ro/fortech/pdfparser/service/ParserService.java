@@ -47,11 +47,11 @@ public class ParserService {
     }
 
     @Transactional
-    public ParsedPdfDto importPdf() throws Exception {
+    public ParsedPdfDto importPdf(String path) throws Exception {
         // File file = FileUtils.getFile(BL_FILENAME);
 
         InputStream in = new ClassPathResource(
-                "/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
+                path, ParserPdfService.class.getClassLoader()).getInputStream();
 
         return parse(in);
     }
@@ -59,7 +59,7 @@ public class ParserService {
     public ParsedPdfDto parse(InputStream file) {
         try {
             PDFTextStripper pdfStripper = null;
-            PDDocument pdDoc = null;
+            PDDocument pdDoc;
             PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(file));
             parser.parse();
             try (COSDocument cosDoc = parser.getDocument()) {
@@ -109,6 +109,8 @@ public class ParserService {
     public List<BalanceSheetEntity> getBalance(){
         return balanceSheetRepository.findAll();
     }
+
+
 
     private void pdfSettings(PDFTextStripper pdfStripper, PDDocument pdDoc) {
         pdfStripper.setSortByPosition(true);
@@ -164,9 +166,8 @@ public class ParserService {
         LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
         LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
 
-        String firma = line1;
-        String numeFirma = firma.substring(0, firma.indexOf("c.f."));
-        String cif = firma.substring(firma.indexOf("RO"), firma.indexOf("r.c."));
+        String numeFirma = line1.substring(0, line1.indexOf("c.f."));
+        String cif = line1.substring(line1.indexOf("RO"), line1.indexOf("r.c."));
 
         ParsedPdfDto dto = new ParsedPdfDto();
         dto.setCf(cif);

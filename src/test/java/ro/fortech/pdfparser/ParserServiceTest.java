@@ -38,41 +38,46 @@ class ParserServiceTest {
     void importPdf() throws Exception {
         // ParserPdfService().importPdf();
 
-        //new ParserService().importPdf();
+        //new ParserService(balanceSheetRepository, balanceSheetLineRepository).importPdf();
     }
 
-//    @Test
-//    void DetailsForSheet() throws Exception {
-//        InputStream file = new ClassPathResource(
-//                "/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
-//
-//            PDFTextStripper pdfStripper = null;
-//            PDDocument pdDoc = null;
-//            PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(file));
-//            parser.parse();
-//            COSDocument cosDoc = parser.getDocument();
-//            pdfStripper = new PDFTextStripper();
-//            pdDoc = new PDDocument(cosDoc);
-//            pdfStripper.setSortByPosition(true);
-//            pdfStripper.setStartPage(0);
-//            pdfStripper.setEndPage(pdDoc.getNumberOfPages());
-//
-//            String parsedText = pdfStripper.getText(pdDoc);
-//
-//            String[] lines = parsedText.split(System.lineSeparator());
-//
-//            ParsedPdfDto dto = new ParserService().getDetails(parsedText, lines[0]);
-//
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//            LocalDate from = LocalDate.parse("2017-12-01",formatter);
-//            LocalDate to = LocalDate.parse("2017-12-31",formatter);
-//            List<ParsedPdfLineDto> parsedLines = new ArrayList<>();
-//
-//            ParsedPdfDto found = new ParsedPdfDto("SOFT APLICATIV SI SERVICII S.A.   ", "RO2577839   ", from, to, parsedLines);
-//
-//            assertThat(found).isEqualTo(dto);
-//
-//    }
+    @MockBean
+    BalanceSheetLineRepository balanceSheetLineRepository;
+    @MockBean
+    BalanceSheetRepository balanceSheetRepository;
+
+    @Test
+    void DetailsForSheet() throws Exception {
+        InputStream file = new ClassPathResource(
+                "/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
+
+            PDFTextStripper pdfStripper = null;
+            PDDocument pdDoc = null;
+            PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(file));
+            parser.parse();
+            COSDocument cosDoc = parser.getDocument();
+            pdfStripper = new PDFTextStripper();
+            pdDoc = new PDDocument(cosDoc);
+            pdfStripper.setSortByPosition(true);
+            pdfStripper.setStartPage(0);
+            pdfStripper.setEndPage(pdDoc.getNumberOfPages());
+
+            String parsedText = pdfStripper.getText(pdDoc);
+
+            String[] lines = parsedText.split(System.lineSeparator());
+
+            ParsedPdfDto dto = new ParserService(balanceSheetRepository, balanceSheetLineRepository).getDetails(parsedText, lines[0]);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate from = LocalDate.parse("2017-12-01",formatter);
+            LocalDate to = LocalDate.parse("2017-12-31",formatter);
+            List<ParsedPdfLineDto> parsedLines = new ArrayList<>();
+
+            ParsedPdfDto found = new ParsedPdfDto("SOFT APLICATIV SI SERVICII S.A.   ", "RO2577839   ", from, to, parsedLines);
+
+            assertThat(found).isEqualTo(dto);
+
+    }
 
 
     //getDetails Method test
