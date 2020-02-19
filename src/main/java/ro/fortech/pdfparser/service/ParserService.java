@@ -21,6 +21,7 @@ import ro.fortech.pdfparser.repository.BalanceSheetLineRepository;
 import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 
 import javax.swing.text.html.parser.Parser;
+import javax.transaction.Transactional;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,20 +31,22 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 
-
+@Service
 public class ParserService {
 
 
     private BalanceSheetRepository balanceSheetRepository;
     private BalanceSheetLineRepository balanceSheetLineRepository;
 
+    @Autowired
     public ParserService(BalanceSheetRepository balanceSheetRepository,BalanceSheetLineRepository balanceSheetLineRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.balanceSheetLineRepository = balanceSheetLineRepository;
     }
 
+    @Transactional
     public ParsedPdfDto importPdf() throws Exception {
         // File file = FileUtils.getFile(BL_FILENAME);
 
@@ -52,7 +55,6 @@ public class ParserService {
 
         return parse(in);
     }
-
 
     public ParsedPdfDto parse(InputStream file) {
         try {
@@ -73,13 +75,26 @@ public class ParserService {
 
                 setLinesToDto(lines, dto);
 
+
+                //BalanceSheetEntity bal = new BalanceSheetEntity();
+               // bal = bal.toBalanceSheetEntity(parsedPdfDto);
+
+//
+//                balanceSheetRepository.save(bal);
+//                for (int i = 0; i < bal.getLines().size(); i++)
+//                    balanceSheetLineRepository.save(bal.getLines().get(i));
+
                 BalanceSheetEntity updatedDto = update(dto);
+
+                updatedDto = updatedDto.toBalanceSheetEntity(dto);
+
+                balanceSheetRepository.save(updatedDto);
 
                 for (int i = 0; i < updatedDto.getLines().size(); i++) {
                     balanceSheetLineRepository.save(updatedDto.getLines().get(i));
                 }
 
-                balanceSheetRepository.save(updatedDto);
+
 
                 return dto;
             }
@@ -89,6 +104,10 @@ public class ParserService {
         }
 
         return null;
+    }
+
+    public List<BalanceSheetEntity> getBalance(){
+        return balanceSheetRepository.findAll();
     }
 
     private void pdfSettings(PDFTextStripper pdfStripper, PDDocument pdDoc) {
@@ -124,6 +143,7 @@ public class ParserService {
 
         }
     }
+
 
     public ParsedPdfDto getDetails(String parsedText, String line1) {
         Scanner scanner = new Scanner(parsedText);
@@ -168,6 +188,7 @@ public class ParserService {
     }
 
     private void setNumbersToLine(List<BigDecimal> numbers, String accountNumber, ParsedPdfLineDto line) {
+
         line.setAccNr(accountNumber);
         line.setSolduriInitialeD(numbers.get(1));
         line.setSolduriInitialeC(numbers.get(2));
@@ -206,7 +227,15 @@ public class ParserService {
         bal.setLines(pojo.getLines()
                 .stream()
                 .map(ParsedPdfLineDto::update)
-                .collect(Collectors.toList())) ;
+               .collect(Collectors.toList()));
+//        List<BalanceSheetLineEntity> balanceSheetLineEntities = new ArrayList<>();
+
+        List<BalanceSheetLineEntity> balanceSheetLineEntities = pojo.getLines()
+                .stream()
+                .map(ParsedPdfLineDto::update)
+                .collect(Collectors.toList());
+        balanceSheetLineEntities
+                .forEach(balanceSheetLineEntity -> balanceSheetLineEntity.setBalanceSheet(bal));
 
         //System.out.println(bal.getLines().get(0));
         return bal;

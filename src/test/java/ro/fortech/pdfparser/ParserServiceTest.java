@@ -38,7 +38,7 @@ class ParserServiceTest {
     void importPdf() throws Exception {
         // ParserPdfService().importPdf();
 
-        new ParserService().importPdf();
+        //new ParserService().importPdf();
     }
 
 //    @Test

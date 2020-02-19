@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity
 @Table(name = "ifrs_balance_sheets")
-public class BalanceSheetEntity extends BaseEntity{
+public class BalanceSheetEntity{
 
     @Id
     @GeneratedValue
@@ -47,7 +47,7 @@ public class BalanceSheetEntity extends BaseEntity{
     @Column(name = "to_date", nullable = false, updatable = false)
     private LocalDate to;
 
-    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER)
+    @OneToMany( mappedBy = "balanceSheet", fetch = FetchType.EAGER)
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
     public BalanceSheetEntity(String name, String cif, LocalDate from, LocalDate to) {
@@ -62,22 +62,48 @@ public class BalanceSheetEntity extends BaseEntity{
         bal.cf = pojo.getCf();
         bal.from = pojo.getFrom();
         bal.to = pojo.getTo();
-        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
         bal.lines = pojo.getLines()
                 .stream()
                 .map(ParsedPdfLineDto::update)
                 .collect(Collectors.toList());
+
+
         return bal;
+    }
+
+    public ParsedPdfDto toPojo() {
+        ParsedPdfDto pojo = new ParsedPdfDto();
+        pojo.setNumeFirma(numeFirma);
+        pojo.setCf(cf);
+        pojo.setFrom(from);
+        pojo.setTo(to);
+
+        ParsedPdfLineDto parsedPdfLineDto = new ParsedPdfLineDto();
+        pojo.setLines(parsedPdfLineDto.toPojo(lines));
+
+        return pojo;
+
     }
 
     public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
         BalanceSheetEntity bal = new BalanceSheetEntity();
-        bal.setLines(pojo.getLines()
+        bal.setNumeFirma(pojo.getNumeFirma());
+        bal.setCf(pojo.getCf());
+        bal.setFrom(pojo.getFrom());
+        bal.setTo(pojo.getTo());
+        List<BalanceSheetLineEntity> balanceSheetLineEntities = pojo.getLines()
                 .stream()
                 .map(ParsedPdfLineDto::update)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        balanceSheetLineEntities
+                .forEach(balanceSheetLineEntity -> balanceSheetLineEntity.setBalanceSheet(bal));
+        bal.setLines(balanceSheetLineEntities);
+        System.out.println("--------------------------");
+        System.out.println(bal.getNumeFirma());
+        System.out.println("--------------------------");
         return bal;
     }
+
 
     public String getNumeFirma() {
         return numeFirma;

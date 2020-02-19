@@ -21,12 +21,12 @@ import java.math.BigDecimal;
 public class BalanceSheetLineEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "balance_sheet_id",  nullable = true)
+    @ManyToOne( fetch = FetchType.EAGER)
+    @JoinColumn(name = "balance_sheet_id",  nullable = false)
     private BalanceSheetEntity balanceSheet;
 
 
@@ -47,6 +47,7 @@ public class BalanceSheetLineEntity {
 
     public ParsedPdfLineDto toPojo() {
         ParsedPdfLineDto pojo = new ParsedPdfLineDto();
+        this.accNr = accNr;
         this.solduriInitialeD = solduriInitialeD;
         this.solduriInitialeC = solduriInitialeC;
         this.rulajeD = rulajeD;
@@ -57,19 +58,16 @@ public class BalanceSheetLineEntity {
         this.sumeTotaleC = sumeTotaleC;
         this.solduriFinaleD = solduriFinaleD;
         this.solduriFinaleC = solduriFinaleC;
+        this.balanceSheet = balanceSheet;
         return pojo;
-    }
-
-
-
-
-
-    public BalanceSheetEntity getBalanceSheet() {
-        return balanceSheet;
     }
 
     public void setBalanceSheet(BalanceSheetEntity balanceSheet) {
         this.balanceSheet = balanceSheet;
+    }
+
+    public BalanceSheetEntity getBalanceSheet() {
+        return balanceSheet;
     }
 
     public String getAccNr() {
