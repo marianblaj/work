@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
+import ro.fortech.pdfparser.entity.exceptions.FileAlreadyParsedException;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParserService;
 
@@ -23,9 +24,13 @@ public class BalanceController {
         this.service = service;
     }
 
-    @PostMapping("/add")
-    public void add(@RequestBody String path) throws Exception {
-        service.add(path);
+    @PostMapping("/add/{path}")
+    public void add(@PathVariable String path) throws Exception {
+        try {
+            service.add(path);
+        }catch (FileAlreadyParsedException e){
+            System.out.println("Already here "+e.getMessage());
+        }
     }
 
     @GetMapping("/")

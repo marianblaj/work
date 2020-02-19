@@ -29,7 +29,7 @@ public class BalanceSheetLineEntity {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "balance_sheets_id", nullable = true)
+    @JoinColumn(name = "balance_sheets_id", nullable = false)
     private BalanceSheetEntity balanceSheet;
 
 
@@ -160,21 +160,21 @@ public class BalanceSheetLineEntity {
     }
 
 
-//    @Override
-//    public String toString() {
-//        return "BalanceSheetLineEntity{" +
-//                "balanceSheet=" + balanceSheet +
-//                ", accNr='" + accNr + '\'' +
-//                ", solduriInitialeD=" + solduriInitialeD +
-//                ", solduriInitialeC=" + solduriInitialeC +
-//                ", rulajeD=" + rulajeD +
-//                ", rulajeC=" + rulajeC +
-//                ", totalRulajeC=" + totalRulajeC +
-//                ", totalRulajeD=" + totalRulajeD +
-//                ", sumeTotaleD=" + sumeTotaleD +
-//                ", sumeTotaleC=" + sumeTotaleC +
-//                ", solduriFinaleD=" + solduriFinaleD +
-//                ", solduriFinaleC=" + solduriFinaleC +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "BalanceSheetLineEntity{" +
+                "balanceSheet=" + balanceSheet +
+                ", accNr='" + accNr + '\'' +
+                ", solduriInitialeD=" + solduriInitialeD +
+                ", solduriInitialeC=" + solduriInitialeC +
+                ", rulajeD=" + rulajeD +
+                ", rulajeC=" + rulajeC +
+                ", totalRulajeC=" + totalRulajeC +
+                ", totalRulajeD=" + totalRulajeD +
+                ", sumeTotaleD=" + sumeTotaleD +
+                ", sumeTotaleC=" + sumeTotaleC +
+                ", solduriFinaleD=" + solduriFinaleD +
+                ", solduriFinaleC=" + solduriFinaleC +
+                '}';
+    }
 }

@@ -34,10 +34,10 @@ public class BalanceSheetEntity extends BaseEntity {
 
     @NotNull
     @Column(name = "nume_firma", nullable = false, updatable = false)
-    private  String numeFirma;
+    private String numeFirma;
 
     @NotNull
-    @Column(name = "cod_fiscal", nullable = false, updatable = false)
+    @Column(name = "cod_fiscal", nullable = false, updatable = false, unique = true)
     private String cf;
 
     @NotNull
@@ -74,6 +74,7 @@ public class BalanceSheetEntity extends BaseEntity {
         parsedPdfDto.setTo(balanceSheetEntity.to);
         ParsedPdfLineDto parsedPdfLineDto = new ParsedPdfLineDto();
         parsedPdfDto.setLines(parsedPdfLineDto.toDto(balanceSheetEntity.getLines()));
+
 
         return parsedPdfDto;
     }

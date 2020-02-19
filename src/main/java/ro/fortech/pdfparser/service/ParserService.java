@@ -12,6 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
+import ro.fortech.pdfparser.entity.exceptions.FileAlreadyParsedException;
 import ro.fortech.pdfparser.repository.BalanceSheetLineRepository;
 import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 
@@ -33,9 +34,9 @@ public class ParserService {
     private BalanceSheetLineRepository balanceSheetLineRepository;
 
     @Autowired
-    public ParserService(BalanceSheetRepository balanceSheetRepository,BalanceSheetLineRepository balanceSheetLineRepository) {
+    public ParserService(BalanceSheetRepository balanceSheetRepository, BalanceSheetLineRepository balanceSheetLineRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
-        this.balanceSheetLineRepository=balanceSheetLineRepository;
+        this.balanceSheetLineRepository = balanceSheetLineRepository;
     }
 
     public ParserService() {
@@ -45,7 +46,7 @@ public class ParserService {
         // File file = FileUtils.getFile(BL_FILENAME);
 
         InputStream in = new ClassPathResource(
-                "/2017 SAS balanta 31122017.pdf", ParserPdfService.class.getClassLoader()).getInputStream();
+                path, ParserPdfService.class.getClassLoader()).getInputStream();
 
         return parse(in);
     }
@@ -83,7 +84,7 @@ public class ParserService {
                 String[] dates = date.split("\\D");
 
                 String numeFirma = firma.substring(0, firma.indexOf("c.f."));
-                String cif = firma.substring(firma.indexOf("RO"), firma.indexOf("r.c."));
+                String cif = firma.substring(firma.indexOf(" c.f")+5, firma.indexOf("r.c."));
 
                 LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
                 LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
@@ -137,24 +138,36 @@ public class ParserService {
 
 
     public void add(String path) throws Exception {
-        BalanceSheetEntity updatedDto;
-        updatedDto = update(importPdf(path));
 
 
-        System.out.println(updatedDto);
-
-        balanceSheetRepository.save(updatedDto);
+    BalanceSheetEntity docToSave;
+    docToSave = update(importPdf(path));
 
 
 
-        for (int i=0;i<updatedDto.getLines().size();i++){
-            balanceSheetLineRepository.save(updatedDto.getLines().get(i));
-        }
+    balanceSheetRepository.save(docToSave);
+
+    for (int i = 0; i < docToSave.getLines().size(); i++) {
+        balanceSheetLineRepository.save(docToSave.getLines().get(i));
     }
+
+
+    }
+
 
     public List<BalanceSheetEntity> getAll() {
         return balanceSheetRepository.findAll();
     }
+
+
+    public boolean exists(BalanceSheetEntity balanceSheetEntity) {
+
+        if (balanceSheetEntity.getCf().equals(balanceSheetRepository.findByCf(balanceSheetEntity.getCf()))) {
+            return true;
+        }
+        return false;
+    }
+
 
     private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();
@@ -190,7 +203,6 @@ public class ParserService {
         }
         return numbers;
     }
-
 
 
     public BalanceSheetEntity update(ParsedPdfDto pojo) {
