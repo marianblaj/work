@@ -9,19 +9,23 @@ import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import ro.fortech.pdfparser.service.ParserService;
 
 @SpringBootApplication
-public class PdfParserApplication implements CommandLineRunner {
+public class PdfParserApplication {
 
 	@Autowired
 	private BalanceSheetRepository balanceSheetRepository;
+
+	@Autowired
+	private BalanceSheetLineRepository balanceSheetLineRepository;
+
 
 	public static void main(String[] args)
 	{
 		SpringApplication.run(PdfParserApplication.class, args);
 	}
 
-	@Override
-	public void run(String...args) throws Exception {
-		new ParserService(balanceSheetRepository).importPdf();
-	}
+//	@Override
+//	public void run(String...args) throws Exception {
+//		new ParserService(balanceSheetRepository,balanceSheetLineRepository).importPdf();
+//	}
 
 }

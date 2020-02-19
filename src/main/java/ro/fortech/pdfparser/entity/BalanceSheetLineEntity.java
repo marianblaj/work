@@ -23,6 +23,10 @@ public class BalanceSheetLineEntity {
     @GeneratedValue
     private int id;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "balance_sheet_id",  nullable = true)
+    private BalanceSheetEntity balanceSheet;
 
     private String accNr;
     private BigDecimal solduriInitialeD;
@@ -37,7 +41,13 @@ public class BalanceSheetLineEntity {
     private BigDecimal solduriFinaleC;
 
 
+    public BalanceSheetEntity getBalanceSheet() {
+        return balanceSheet;
+    }
 
+    public void setBalanceSheet(BalanceSheetEntity balanceSheet) {
+        this.balanceSheet = balanceSheet;
+    }
 
     public ParsedPdfLineDto toPojo() {
         ParsedPdfLineDto pojo = new ParsedPdfLineDto();

@@ -28,8 +28,7 @@ public class BalanceSheetEntity {
 
     @Id
     @GeneratedValue
-     private long id;
-
+    private long id;
 
     @NotNull
     @Column(name = "nume_firma", nullable = false, updatable = false)
@@ -47,7 +46,7 @@ public class BalanceSheetEntity {
     @Column(name = "to_date", nullable = false, updatable = false)
     private LocalDate to;
 
-    @OneToMany(cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "balanceSheet", fetch = FetchType.EAGER)
     private List<BalanceSheetLineEntity> lines = new ArrayList<>();
 
     public BalanceSheetEntity(String numeFirma,String cf,LocalDate from, LocalDate to)
@@ -58,16 +57,35 @@ public class BalanceSheetEntity {
         this.to=to;
     }
 
-    public BalanceSheetEntity update(ParsedPdfDto pojo) {
+    public ParsedPdfDto sheetToDto(){
+        ParsedPdfDto dto = new ParsedPdfDto();
+        ParsedPdfLineDto lineDto = new ParsedPdfLineDto();
+        dto.setNumeFirma(numeFirma);
+        dto.setCf(cf);
+        dto.setFrom(from);
+        dto.setTo(to);
+        dto.setLines(lineDto.toPojo(lines));
+        return dto;
+    }
+
+
+    public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
         BalanceSheetEntity bal = new BalanceSheetEntity();
-        bal.cf = pojo.getCf();
-        bal.from = pojo.getFrom();
-        bal.to = pojo.getTo();
+        bal.setNumeFirma(pojo.getNumeFirma());
+        bal.setCf(pojo.getCf());
+        bal.setFrom(pojo.getFrom());
+        bal.setTo(pojo.getTo());
         //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
-        bal.lines = pojo.getLines()
+        List<BalanceSheetLineEntity> balanceSheetLineEntities = pojo.getLines()
                 .stream()
                 .map(ParsedPdfLineDto::update)
                 .collect(Collectors.toList());
+        balanceSheetLineEntities
+                .forEach(balanceSheetLineEntity -> balanceSheetLineEntity.setBalanceSheet(bal));
+        bal.setLines(balanceSheetLineEntities);
+        System.out.println("--------------------------");
+        System.out.println(bal.getNumeFirma());
+        System.out.println("--------------------------");
         return bal;
     }
 

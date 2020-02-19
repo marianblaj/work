@@ -4,6 +4,8 @@ import lombok.Data;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ParsedPdfLineDto {
@@ -43,6 +45,31 @@ public class ParsedPdfLineDto {
         this.solduriFinaleC = solduriFinaleC;
         return pojo;
     }
+
+    public List<ParsedPdfLineDto> toPojo(List<BalanceSheetLineEntity> balanceSheetLineEntities) {
+
+        List<ParsedPdfLineDto> pojo = new ArrayList<>();
+        for(BalanceSheetLineEntity sheetLineEntity : balanceSheetLineEntities) {
+            ParsedPdfLineDto parsedPdfLineDto = new ParsedPdfLineDto();
+
+            parsedPdfLineDto.setAccNr(sheetLineEntity.getAccNr());
+            parsedPdfLineDto.setSolduriInitialeD(sheetLineEntity.getSolduriInitialeD());
+            parsedPdfLineDto.setSolduriInitialeC(sheetLineEntity.getSolduriInitialeC());
+            parsedPdfLineDto.setRulajePerioadaD(sheetLineEntity.getRulajeD());
+            parsedPdfLineDto.setRulajePerioadaC(sheetLineEntity.getRulajeC());
+            parsedPdfLineDto.setTotalRulajeD(sheetLineEntity.getTotalRulajeD());
+            parsedPdfLineDto.setTotalRulajeC(sheetLineEntity.getTotalRulajeC());
+            parsedPdfLineDto.setSumeTotaleD(sheetLineEntity.getSumeTotaleD());
+            parsedPdfLineDto.setSumeTotaleC(sheetLineEntity.getSumeTotaleC());
+            parsedPdfLineDto.setSolduriFinaleD(sheetLineEntity.getSolduriFinaleD());
+            parsedPdfLineDto.setSolduriFinaleC(sheetLineEntity.getSolduriFinaleC());
+
+            pojo.add(parsedPdfLineDto);
+        }
+
+        return pojo;
+    }
+
 
     public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
         BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
