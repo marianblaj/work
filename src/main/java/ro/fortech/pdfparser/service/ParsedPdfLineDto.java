@@ -46,20 +46,17 @@ public class ParsedPdfLineDto {
 
     public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
         BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
-        bal.setSolduriFinaleD(pojo.getSolduriInitialeD());
-        bal.setSolduriFinaleC(pojo.getSolduriInitialeC());
+        bal.setAccNr(pojo.getAccNr());
+        bal.setSolduriInitialeD(pojo.getSolduriInitialeD());
+        bal.setSolduriInitialeC(pojo.getSolduriInitialeC());
         bal.setRulajeD(pojo.getRulajePerioadaD());
         bal.setRulajeC(pojo.getRulajePerioadaC());
-        bal.setTotalRulajeC(pojo.getTotalRulajeC());
         bal.setTotalRulajeD(pojo.getTotalRulajeD());
+        bal.setTotalRulajeC(pojo.getTotalRulajeC());
         bal.setSumeTotaleD(pojo.getSumeTotaleD());
         bal.setSumeTotaleC(pojo.getSumeTotaleC());
         bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
         bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
-                /*pojo.getLines()
-                .stream()
-                .map(ParsedPdfLineDto::toPojo)
-                .map(ParsedPdfLineDto::toPojo).collect(Collectors.toList());*/
         return bal;
     }
 

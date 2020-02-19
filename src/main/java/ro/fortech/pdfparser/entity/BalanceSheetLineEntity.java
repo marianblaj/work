@@ -17,15 +17,16 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ifrs_balance_sheet_lines")
+@Table(name = "balance_sheet_lines")
 public class BalanceSheetLineEntity {
 
     @Id
+    @GeneratedValue
     private int id;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "balance_sheet_id",  nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "balance_sheet_id",  nullable = false )
     private BalanceSheetEntity balanceSheet;
 
 
@@ -59,7 +60,23 @@ public class BalanceSheetLineEntity {
         return pojo;
     }
 
+    public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
+        BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
 
+        bal.setSolduriInitialeD(pojo.getSolduriInitialeD());
+        bal.setSolduriInitialeC(pojo.getSolduriInitialeC());
+        bal.setRulajeD(pojo.getRulajePerioadaD());
+        bal.setRulajeC(pojo.getRulajePerioadaC());
+        bal.setTotalRulajeD(pojo.getTotalRulajeD());
+        bal.setTotalRulajeC(pojo.getTotalRulajeC());
+        bal.setSumeTotaleD(pojo.getSumeTotaleD());
+        bal.setSumeTotaleC(pojo.getSumeTotaleC());
+        bal.setSolduriFinaleD(pojo.getSolduriFinaleD());
+        bal.setSolduriFinaleC(pojo.getSolduriFinaleC());
+
+
+        return bal;
+    }
 
 
 

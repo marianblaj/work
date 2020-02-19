@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@Service
 public class ParserPdfService {
 
 
@@ -144,6 +146,9 @@ public class ParserPdfService {
 
     private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();
+        System.out.println("-------------------------------------");
+        System.out.println(accountNumber);
+        System.out.println("-------------------------------------");
 
         ParsedPdfLineDto line = new ParsedPdfLineDto();
 

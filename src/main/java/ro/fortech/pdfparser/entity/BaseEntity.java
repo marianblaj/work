@@ -9,4 +9,5 @@ public abstract class BaseEntity {
     @Id
     private long id;
 
+
 }
