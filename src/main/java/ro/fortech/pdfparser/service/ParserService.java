@@ -1,36 +1,36 @@
-package ro.fortech.pdfparser.service;
-
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.pdfbox.cos.COSDocument;
-import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
-import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import ro.fortech.pdfparser.entity.BalanceSheetEntity;
-import ro.fortech.pdfparser.repository.BalanceSheetRepository;
-
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Service
-
-
-public class ParserService {
-
-
-//    path = "/2017 SAS balanta 31122017.pdf"
+//package ro.fortech.pdfparser.service;
+//
+//import lombok.RequiredArgsConstructor;
+//import org.apache.commons.lang3.math.NumberUtils;
+//import org.apache.pdfbox.cos.COSDocument;
+//import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
+//import org.apache.pdfbox.pdfparser.PDFParser;
+//import org.apache.pdfbox.pdmodel.PDDocument;
+//import org.apache.pdfbox.text.PDFTextStripper;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.core.io.ClassPathResource;
+//import org.springframework.stereotype.Service;
+//import ro.fortech.pdfparser.entity.BalanceSheetEntity;
+//import ro.fortech.pdfparser.repository.BalanceSheetRepository;
+//
+//import java.io.InputStream;
+//import java.math.BigDecimal;
+//import java.time.LocalDate;
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.Scanner;
+//import java.util.stream.Collectors;
+//
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@Service
 //
 //
+//public class ParserService {
+//
+
+    //path = "/2017 SAS balanta 31122017.pdf"
+
+
 //    private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
 //        String accountNumber = numbers.get(0).toPlainString().trim();
 //
@@ -49,7 +49,7 @@ public class ParserService {
 //        line.setSolduriFinaleC(numbers.get(10));
 //        return line;
 //    }
-//
+
 //    private List<BigDecimal> getBigDecimals(String l) {
 //        String l2 = l.replaceAll("(\\d)\\s(\\d)", "$1$2");
 //        Scanner sc = new Scanner(l2);
@@ -65,7 +65,7 @@ public class ParserService {
 //        }
 //        return numbers;
 //    }
-//
+
 //    public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
 //        BalanceSheetEntity bal = new BalanceSheetEntity();
 //        bal.setNumeFirma(pojo.getNumeFirma());
@@ -78,4 +78,4 @@ public class ParserService {
 //                .collect(Collectors.toList()));
 //        return bal;
 //    }
-}
+//}

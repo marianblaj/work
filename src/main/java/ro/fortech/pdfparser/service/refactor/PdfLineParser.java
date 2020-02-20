@@ -1,12 +1,13 @@
 package ro.fortech.pdfparser.service.refactor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Service
+@Component
 public class PdfLineParser {
 
     public ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
