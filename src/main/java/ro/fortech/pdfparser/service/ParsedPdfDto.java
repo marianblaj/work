@@ -12,12 +12,10 @@ import java.util.function.Function;
 public class ParsedPdfDto {
 
     private String numeFirma;
-
     private String cf;
     private LocalDate from;
     private LocalDate to;
     private List<ParsedPdfLineDto> lines = new ArrayList<>();
-
 
     public String getNumeFirma() {
         return numeFirma;
