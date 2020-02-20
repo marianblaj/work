@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 
-@Repository("BalanceSheetRepository")
+@Repository
 public interface BalanceSheetRepository extends JpaRepository<BalanceSheetEntity, Long> {
-    String findByCf(String cif);
+    BalanceSheetEntity findByCf(String cif);
+    BalanceSheetEntity findByNumeFirma(String nume);
 
 }

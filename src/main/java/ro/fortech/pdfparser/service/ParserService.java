@@ -8,7 +8,9 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
@@ -22,12 +24,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 
 
 @Service
+
 public class ParserService {
 
     private BalanceSheetRepository balanceSheetRepository;
@@ -70,10 +74,13 @@ public class ParserService {
                 String[] lines = parsedText.split(System.lineSeparator());
                 BigDecimal spdTotal = BigDecimal.ZERO;
 
-                Scanner scanner = new Scanner(parsedText);
-                String date = "";
 
+
+                Scanner scanner = new Scanner(parsedText);
                 String firma = lines[0];
+                String date="";
+
+
                 for (int i = 0; i < 3; i++) {
                     scanner.nextLine();
                     if (i == 2) {
@@ -81,10 +88,11 @@ public class ParserService {
                     }
                 }
 
+
                 String[] dates = date.split("\\D");
 
-                String numeFirma = firma.substring(0, firma.indexOf("c.f."));
-                String cif = firma.substring(firma.indexOf(" c.f")+5, firma.indexOf("r.c."));
+                String numeFirma = firma.substring(0, firma.indexOf("c.f.")).trim();
+                String cif = firma.substring(firma.indexOf(" c.f") + 5, firma.indexOf("r.c.")).trim();
 
                 LocalDate startDate = LocalDate.of(Integer.parseInt(dates[2]), Integer.parseInt(dates[1]), Integer.parseInt(dates[0]));
                 LocalDate endDate = LocalDate.of(Integer.parseInt(dates[8]), Integer.parseInt(dates[7]), Integer.parseInt(dates[6]));
@@ -94,6 +102,7 @@ public class ParserService {
                 dto.setNumeFirma(numeFirma);
                 dto.setFrom(startDate);
                 dto.setTo(endDate);
+
 
 
                 for (String l : lines) {
@@ -109,17 +118,18 @@ public class ParserService {
 
                         if (accountNumber.equals("121")) {
                             continue;
-                        } else if (!accountNumber.startsWith("1"))
-                            break;
+                        }
 
                         ParsedPdfLineDto line = createAndSaveLine(numbers);
                         dto.getLines().add(line);
+
+
 
                     }
 
                 }
 
-//                add(dto);
+//            add(dto);
 
 
                 ParsedPdfLineDto lineDto = new ParsedPdfLineDto();
@@ -137,19 +147,24 @@ public class ParserService {
     }
 
 
+    public boolean exists(BalanceSheetEntity balanceSheetEntity) {
+        if (balanceSheetEntity.getCf().equals(balanceSheetRepository.findByNumeFirma(balanceSheetEntity.getCf()))) {
+            return true;
+        }
+        return false;
+    }
+
     public void add(String path) throws Exception {
 
 
-    BalanceSheetEntity docToSave;
-    docToSave = update(importPdf(path));
+        BalanceSheetEntity docToSave;
+        docToSave = update(importPdf(path));
 
+            balanceSheetRepository.save(docToSave);
 
-
-    balanceSheetRepository.save(docToSave);
-
-    for (int i = 0; i < docToSave.getLines().size(); i++) {
-        balanceSheetLineRepository.save(docToSave.getLines().get(i));
-    }
+            for (int i = 0; i < docToSave.getLines().size(); i++) {
+                balanceSheetLineRepository.save(docToSave.getLines().get(i));
+            }
 
 
     }
@@ -159,13 +174,8 @@ public class ParserService {
         return balanceSheetRepository.findAll();
     }
 
-
-    public boolean exists(BalanceSheetEntity balanceSheetEntity) {
-
-        if (balanceSheetEntity.getCf().equals(balanceSheetRepository.findByCf(balanceSheetEntity.getCf()))) {
-            return true;
-        }
-        return false;
+    public BalanceSheetEntity getByCif(String cif) {
+        return balanceSheetRepository.findByCf(cif);
     }
 
 
@@ -211,18 +221,14 @@ public class ParserService {
         bal.setCf(pojo.getCf());
         bal.setFrom(pojo.getFrom());
         bal.setTo(pojo.getTo());
-        List<BalanceSheetLineEntity> balanceSheetLineEntities = pojo.getLines()
-                .stream()
-                .map(ParsedPdfLineDto::update)
-                .collect(Collectors.toList());
+    List<BalanceSheetLineEntity> balanceSheetLineEntities = pojo.getLines()
+            .stream()
+            .map(ParsedPdfLineDto::update)
+            .collect(Collectors.toList());
         balanceSheetLineEntities.forEach(balanceSheetLineEntity -> balanceSheetLineEntity.setBalanceSheet(bal));
         bal.setLines(balanceSheetLineEntities);
-
-
-        System.out.println(bal.getLines().size() + "test---------------------");
-
         return bal;
-    }
+}
 
 
 }

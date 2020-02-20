@@ -16,33 +16,27 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/balance")
 public class BalanceController {
+    @Autowired
     ParserService service;
 
-
-    @Autowired
     public BalanceController(ParserService service) {
-        this.service = service;
+        this.service=service;
     }
 
     @PostMapping("/add/{path}")
     public void add(@PathVariable String path) throws Exception {
-        try {
-            service.add(path);
-        }catch (FileAlreadyParsedException e){
-            System.out.println("Already here "+e.getMessage());
-        }
+        service.add(path);
     }
+
+
 
     @GetMapping("/")
     @ResponseBody
-    public  List<ParsedPdfDto> getAll() {
+    public List<ParsedPdfDto> getAll() {
         List<BalanceSheetEntity> balanceSheetEntities = service.getAll();
         return (List<ParsedPdfDto>) balanceSheetEntities.stream()
                 .map(BalanceSheetEntity::toDto)
                 .collect(Collectors.toList());
-
-
-
     }
 
 }

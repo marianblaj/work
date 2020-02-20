@@ -7,7 +7,9 @@ import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -15,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class ParserPdfService {
 
@@ -133,6 +136,8 @@ public class ParserPdfService {
                 System.out.println("SolduriFinaleD: " + lineDto.getSolduriFinaleD().toPlainString());
                 System.out.println("SOlduriFinaleC: " + lineDto.getSolduriFinaleC().toPlainString());
 
+
+
                 return dto;
             }
 
@@ -142,6 +147,8 @@ public class ParserPdfService {
 
         return null;
     }
+
+
 
     private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();

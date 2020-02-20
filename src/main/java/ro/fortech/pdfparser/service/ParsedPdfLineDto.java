@@ -19,7 +19,7 @@ public class ParsedPdfLineDto {
     public void setAccNr(String accNr) {
         this.accNr = accNr;
     }
-    private BalanceSheetEntity balanceSheetEntity;
+
     private String accNr;
     private BigDecimal solduriInitialeD;
     private BigDecimal solduriInitialeC;
@@ -59,7 +59,7 @@ public class ParsedPdfLineDto {
 
     public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
         BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
-        bal.setBalanceSheet(pojo.getBalanceSheetEntity());
+
         bal.setAccNr(pojo.getAccNr());
         bal.setSolduriInitialeD(pojo.getSolduriInitialeD());
         bal.setSolduriInitialeC(pojo.getSolduriInitialeC());

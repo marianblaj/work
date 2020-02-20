@@ -37,7 +37,7 @@ public class BalanceSheetEntity extends BaseEntity {
     private String numeFirma;
 
     @NotNull
-    @Column(name = "cod_fiscal", nullable = false, updatable = false, unique = true)
+    @Column(name = "cod_fiscal", nullable = false, updatable = false)
     private String cf;
 
     @NotNull
@@ -64,7 +64,6 @@ public class BalanceSheetEntity extends BaseEntity {
                 .collect(Collectors.toList());
         return bal;
     }
-
 
     public static ParsedPdfDto toDto(BalanceSheetEntity balanceSheetEntity) {
         ParsedPdfDto parsedPdfDto = new ParsedPdfDto();

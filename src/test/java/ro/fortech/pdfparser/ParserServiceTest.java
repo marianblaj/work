@@ -6,12 +6,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ro.fortech.pdfparser.service.ParserPdfService;
 import ro.fortech.pdfparser.service.ParserService;
 
+
+
 class ParserServiceTest {
 
     @Test
-    void importPdf(String path) throws Exception {
+    void importPdf() throws Exception {
         //new ParserPdfService().importPdf();
 
-        //  new ParserService().importPdf(path);
+        //  new ParserService().importPdf();
     }
 }
