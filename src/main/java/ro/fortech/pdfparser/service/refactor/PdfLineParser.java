@@ -1,12 +1,13 @@
 package ro.fortech.pdfparser.service.refactor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Service
+@Component
 public class PdfLineParser {
 
     public ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
@@ -15,7 +16,6 @@ public class PdfLineParser {
         ParsedPdfLineDto line = new ParsedPdfLineDto();
 
         line.setAccNr(accountNumber);
-
         line.setSolduriInitialeD(numbers.get(1));
         line.setSolduriInitialeC(numbers.get(2));
         line.setRulajePerioadaD(numbers.get(3));
