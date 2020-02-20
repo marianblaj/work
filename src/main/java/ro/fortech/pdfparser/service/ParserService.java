@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 public class ParserService {
 
 
-    //path = "/2017 SAS balanta 31122017.pdf"
-
-
+//    path = "/2017 SAS balanta 31122017.pdf"
+//
+//
 //    private ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
 //        String accountNumber = numbers.get(0).toPlainString().trim();
 //
@@ -49,7 +49,7 @@ public class ParserService {
 //        line.setSolduriFinaleC(numbers.get(10));
 //        return line;
 //    }
-
+//
 //    private List<BigDecimal> getBigDecimals(String l) {
 //        String l2 = l.replaceAll("(\\d)\\s(\\d)", "$1$2");
 //        Scanner sc = new Scanner(l2);
@@ -65,7 +65,7 @@ public class ParserService {
 //        }
 //        return numbers;
 //    }
-
+//
 //    public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
 //        BalanceSheetEntity bal = new BalanceSheetEntity();
 //        bal.setNumeFirma(pojo.getNumeFirma());

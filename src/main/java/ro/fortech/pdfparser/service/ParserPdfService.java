@@ -149,11 +149,8 @@ public class ParserPdfService {
         System.out.println("-------------------------------------");
         System.out.println(accountNumber);
         System.out.println("-------------------------------------");
-
         ParsedPdfLineDto line = new ParsedPdfLineDto();
-
         line.setAccNr(accountNumber);
-
         line.setSolduriInitialeD(numbers.get(1));
         line.setSolduriInitialeC(numbers.get(2));
         line.setRulajePerioadaD(numbers.get(3));

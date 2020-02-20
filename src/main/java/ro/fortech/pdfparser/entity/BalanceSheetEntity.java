@@ -110,18 +110,19 @@ public class BalanceSheetEntity extends BaseEntity {
         return bal;
     }
 
-//    public ParsedPdfDto toPojo() {
-//        ParsedPdfDto pdf = new ParsedPdfDto();
-//        pdf.setCf(cf);
-//        pdf.setFrom(from);
-//        pdf.setTo(to);
-//        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
-//        pdf.setLines(lines
-//                .stream()
-//                .map(BalanceSheetLineEntity::update)
-//                .collect(Collectors.toList()));
-//        return pdf;
-//    }
+    public ParsedPdfDto toDto() {
+        ParsedPdfDto pdf = new ParsedPdfDto();
+        pdf.setNumeFirma(numeFirma);
+        pdf.setCf(cf);
+        pdf.setFrom(from);
+        pdf.setTo(to);
+        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+        pdf.setLines(lines
+                .stream()
+                .map(BalanceSheetLineEntity::toDto)
+                .collect(Collectors.toList()));
+        return pdf;
+    }
 
 
     //

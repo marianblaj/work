@@ -12,6 +12,7 @@ import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -45,20 +46,21 @@ public class BalanceSheetLineEntity {
 
 
 
-    public ParsedPdfLineDto toPojo() {
-        ParsedPdfLineDto pojo = new ParsedPdfLineDto();
-        this.solduriInitialeD = solduriInitialeD;
-        this.solduriInitialeC = solduriInitialeC;
-        this.rulajeD = rulajeD;
-        this.rulajeC = rulajeC;
-        this.totalRulajeC = totalRulajeC;
-        this.totalRulajeD = totalRulajeD;
-        this.sumeTotaleD = sumeTotaleD;
-        this.sumeTotaleC = sumeTotaleC;
-        this.solduriFinaleD = solduriFinaleD;
-        this.solduriFinaleC = solduriFinaleC;
-        return pojo;
-    }
+//    public static ParsedPdfLineDto toDto(BalanceSheetLineEntity balanceSheetLineEntity) {
+//        ParsedPdfLineDto pojo = new ParsedPdfLineDto();
+//        pojo.setAccNr(balanceSheetLineEntity.getAccNr());
+//        this.solduriInitialeC = solduriInitialeC;
+//        this.rulajeD = rulajeD;
+//        this.rulajeC = rulajeC;
+//        this.totalRulajeC = totalRulajeC;
+//        this.totalRulajeD = totalRulajeD;
+//        this.sumeTotaleD = sumeTotaleD;
+//        this.sumeTotaleC = sumeTotaleC;
+//        this.solduriFinaleD = solduriFinaleD;
+//        this.solduriFinaleC = solduriFinaleC;
+//        return pojo;
+//    }
+
 
     public static BalanceSheetLineEntity update(ParsedPdfLineDto pojo) {
         BalanceSheetLineEntity bal = new BalanceSheetLineEntity();
@@ -177,6 +179,26 @@ public class BalanceSheetLineEntity {
     }
 
 
+    public ParsedPdfLineDto toDto() {
+        ParsedPdfLineDto pdf = new ParsedPdfLineDto();
+        pdf.setAccNr(getAccNr());
+        pdf.setSolduriInitialeD(getSolduriInitialeD());
+        pdf.setSolduriInitialeC(getSolduriInitialeC());
+        pdf.setRulajePerioadaD(getRulajeD());
+        pdf.setRulajePerioadaC(getRulajeC());
+        pdf.setTotalRulajeD(getTotalRulajeD());
+        pdf.setTotalRulajeC(getTotalRulajeC());
+        pdf.setSumeTotaleD(getSumeTotaleD());
+        pdf.setSumeTotaleC(getSumeTotaleC());
+        pdf.setSolduriFinaleD(getSolduriFinaleD());
+        pdf.setSolduriFinaleC(getSolduriFinaleC());
+        //BalanceSheetLineEntity balanceSheetLineEntity = new BalanceSheetLineEntity();
+//        pdf.setLines(lines
+//                .stream()
+//                .map(BalanceSheetLineEntity::toDto)
+//                .collect(Collectors.toList()));
+        return pdf;
+    }
 //    @Override
 //    public String toString() {
 //        return "BalanceSheetLineEntity{" +
