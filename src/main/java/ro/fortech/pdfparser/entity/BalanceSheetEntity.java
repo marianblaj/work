@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class BalanceSheetEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
@@ -95,7 +95,7 @@ public class BalanceSheetEntity{
         pojo.setLines(parsedPdfLineNameDto.toPojo(lines));
 
         return pojo;
-    }
+    } 
 
 
     public BalanceSheetEntity toBalanceSheetEntity(ParsedPdfDto pojo) {
@@ -165,12 +165,6 @@ public class BalanceSheetEntity{
                 .reduce(BigDecimal
                         .ZERO, BigDecimal::add);
     }
-
-
-//
-//    public BigDecimal getTotal(String account, Function<BalanceSheetLineEntity, BigDecimal> balanceColumn) {
-//        return lines.stream().filter(a -> a.getAccountIFRS().getAccount().equalsIgnoreCase(account)).map(balanceColumn).reduce(BigDecimal.ZERO, BigDecimal::add);
-//    }
 
 
 //

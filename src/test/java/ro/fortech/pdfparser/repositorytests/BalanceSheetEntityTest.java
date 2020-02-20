@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.repository.BalanceSheetRepository;
@@ -39,14 +40,17 @@ public class BalanceSheetEntityTest {
         testEntityManager.flush();
 
         BalanceSheetEntity found = sheetRepository.findByNumeFirma(sheet.getNumeFirma());
-
         assertThat(found.getNumeFirma())
                 .isEqualTo(sheet.getNumeFirma());
     }
 
     @Test
     public void myTest() throws Exception {
-        sheetRepository.save(new BalanceSheetEntity());
+        BalanceSheetEntity sheet = new BalanceSheetEntity("Fortech","ro1234",from,to);
+        sheetRepository.save(sheet);
+
+        BalanceSheetEntity sheet2 = sheetRepository.findByNumeFirma("Fortech");
+        assertThat(sheet.getNumeFirma()).isEqualTo(sheet2.getNumeFirma());
     }
 
 }
