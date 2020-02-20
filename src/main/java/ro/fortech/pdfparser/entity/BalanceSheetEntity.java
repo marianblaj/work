@@ -4,7 +4,6 @@ package ro.fortech.pdfparser.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
@@ -64,7 +63,7 @@ public class BalanceSheetEntity {
         dto.setCf(cf);
         dto.setFrom(from);
         dto.setTo(to);
-        dto.setLines(lineDto.toPojo(lines));
+        dto.setLines(lineDto.linesToDto(lines));
         return dto;
     }
 

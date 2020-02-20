@@ -31,7 +31,7 @@ public class ParsedPdfLineDto {
     private BigDecimal solduriFinaleC;
 
 
-    public ParsedPdfLineDto toPojo() {
+    public ParsedPdfLineDto linesToDto() {
         ParsedPdfLineDto pojo = new ParsedPdfLineDto();
         this.solduriInitialeD = solduriInitialeD;
         this.solduriInitialeC = solduriInitialeC;
@@ -46,7 +46,7 @@ public class ParsedPdfLineDto {
         return pojo;
     }
 
-    public List<ParsedPdfLineDto> toPojo(List<BalanceSheetLineEntity> balanceSheetLineEntities) {
+    public List<ParsedPdfLineDto> linesToDto(List<BalanceSheetLineEntity> balanceSheetLineEntities) {
 
         List<ParsedPdfLineDto> pojo = new ArrayList<>();
         for(BalanceSheetLineEntity sheetLineEntity : balanceSheetLineEntities) {

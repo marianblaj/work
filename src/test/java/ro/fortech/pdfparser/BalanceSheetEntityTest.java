@@ -46,5 +46,8 @@ public class BalanceSheetEntityTest {
     public void whenSave()
     {
         baseSheetRepository.save(balanceSheetEntity);
+
+        assertThat(balanceSheetEntity)
+                .isEqualTo(baseSheetRepository.findByNumeFirma(balanceSheetEntity.getNumeFirma()));
     }
 }
