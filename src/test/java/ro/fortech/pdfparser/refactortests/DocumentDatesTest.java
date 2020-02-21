@@ -1,4 +1,4 @@
-package ro.fortech.pdfparser;
+package ro.fortech.pdfparser.refactortests;
 
 import lombok.Data;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class DocumentDatesTest {
             , "It was the best of times, it was the worst of times,"
             , "it was the age of wisdom, it was the age of foolishness,"
             , "01.12.2017 -- 31.12.2017"
-            , "it was the season of Light, it was the season of Darkness,"
+            , "01.12.2017 -- 31.12.2017"
             , "it was the spring of hope, it was the winter of despair,"
             , "we had everything before us, we had nothing before us"
     );

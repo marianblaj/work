@@ -28,6 +28,13 @@ public class ParsedPdfDto {
         this.lines = lines;
     }
 
+    public ParsedPdfDto(String numeFirma,String cf, LocalDate from, LocalDate to) {
+        this.numeFirma = numeFirma;
+        this.cf =cf;
+        this.from = from;
+        this.to = to;
+    }
+
     public ParsedPdfDto(){}
 
 

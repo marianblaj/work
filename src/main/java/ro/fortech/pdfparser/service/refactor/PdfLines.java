@@ -1,9 +1,7 @@
 package ro.fortech.pdfparser.service.refactor;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
 import ro.fortech.pdfparser.service.ParsedPdfLineDto;
 
@@ -34,7 +32,7 @@ public class PdfLines {
                     continue;
                 } else if (!accountNumber.startsWith("1"))
                     break;
-                ParsedPdfLineDto line = PdfLineParser.createAndSaveLine(numbers);
+                ParsedPdfLineDto line = PdfCreateAndSaveLine.createAndSaveLine(numbers);
                 dto.getLines().add(line);
             }
         }

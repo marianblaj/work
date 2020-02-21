@@ -1,4 +1,4 @@
-package ro.fortech.pdfparser;
+package ro.fortech.pdfparser.refactortests;
 
 
 import lombok.Data;
@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.repository.BalanceSheetLineRepository;
@@ -17,31 +21,25 @@ import ro.fortech.pdfparser.service.refactor.PdfService;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.list;
 
 
 @RunWith(SpringRunner.class)
 //@DataJpaTest
 @SpringBootTest
 public class PdfServiceTest {
-
-    @Autowired
-    private BalanceSheetRepository balanceSheetRepository;
-
-    @Autowired
-    private BalanceSheetLineRepository balanceSheetLineRepository;
-
     @Autowired
     private PdfService pdfService;
 
     @Test
-    public void whenFindAll_ThenReturnBalanceSheets() throws Exception {
+    public void whenFindCf_ThenReturnBalanceSheets() throws Exception {
         pdfService.add2Database("/2017 SAS balanta 31122017.pdf");
 
+        String cf = "RO2577839   ";
         List<BalanceSheetEntity> listBalance =  pdfService.getAll();
 
-        System.out.println(listBalance.toString());
 
-        assertThat(listBalance).isEqualTo(pdfService.getAll());
+        assertThat(listBalance.get(0).getCf()).isEqualTo(cf);
 
     }
 

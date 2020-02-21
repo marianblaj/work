@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @UtilityClass
-public class PdfLineParser {
+public class PdfCreateAndSaveLine {
 
     public static ParsedPdfLineDto createAndSaveLine(List<BigDecimal> numbers) {
         String accountNumber = numbers.get(0).toPlainString().trim();

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Component
 
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PdfParser {
+public class PdfParseMethod {
 
     DocumentDates documentDates;
 
