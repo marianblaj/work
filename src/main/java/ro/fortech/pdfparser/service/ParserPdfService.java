@@ -28,10 +28,6 @@ public class ParserPdfService {
        return parse(in);
     }
 
-
-
-
-
     public ParsedPdfDto parse(InputStream file) {
         try {
             PDFTextStripper pdfStripper = null;

@@ -32,6 +32,22 @@ public class ParsedPdfLineDto {
     private BigDecimal solduriFinaleD;
     private BigDecimal solduriFinaleC;
 
+    public ParsedPdfLineDto(String accNr, BigDecimal solduriInitialeD, BigDecimal solduriInitialeC, BigDecimal rulajePerioadaD, BigDecimal rulajePerioadaC, BigDecimal totalRulajeD, BigDecimal totalRulajeC, BigDecimal sumeTotaleD, BigDecimal sumeTotaleC, BigDecimal solduriFinaleD, BigDecimal solduriFinaleC) {
+        this.accNr = accNr;
+        this.solduriInitialeD = solduriInitialeD;
+        this.solduriInitialeC = solduriInitialeC;
+        this.rulajePerioadaD = rulajePerioadaD;
+        this.rulajePerioadaC = rulajePerioadaC;
+        this.totalRulajeD = totalRulajeD;
+        this.totalRulajeC = totalRulajeC;
+        this.sumeTotaleD = sumeTotaleD;
+        this.sumeTotaleC = sumeTotaleC;
+        this.solduriFinaleD = solduriFinaleD;
+        this.solduriFinaleC = solduriFinaleC;
+    }
+
+    public ParsedPdfLineDto() {}
+
     public ParsedPdfLineDto toPojo() {
         ParsedPdfLineDto pojo = new ParsedPdfLineDto();
         this.solduriInitialeD = solduriInitialeD;
