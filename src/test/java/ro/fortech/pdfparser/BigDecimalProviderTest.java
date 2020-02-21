@@ -25,6 +25,6 @@ public class BigDecimalProviderTest {
         List<BigDecimal> in = BigDecimalProvider.getBigDecimals("adada 103 1.03 vvv 1.04");
         System.out.println(in.toString());
 
-            assertThat(in.equals(BigDecimalProvider.getBigDecimals("adada 103 1.03 vvv 1.04")));
+            assertThat(in).isEqualTo(BigDecimalProvider.getBigDecimals("adada 103 1.03 vvv 1.04"));
     }
 }

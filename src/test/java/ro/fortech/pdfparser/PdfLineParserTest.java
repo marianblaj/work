@@ -29,6 +29,6 @@ public class PdfLineParserTest {
         ParsedPdfLineDto in = pdfLineParser.createAndSaveLine(numbers);
         System.out.println(in.toString());
 
-        assertThat(in.equals(pdfLineParser.createAndSaveLine(numbers)));
+        assertThat(in).isEqualTo(pdfLineParser.createAndSaveLine(numbers));
     }
 }

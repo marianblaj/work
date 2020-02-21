@@ -31,6 +31,6 @@ public class PdfParserTest {
         ParsedPdfDto in = pdfParser.parse(inputStream);
         System.out.println(in.toString());
 
-        assertThat(in.equals(pdfParser.parse(inputStreamForVerify)));
+        assertThat(in).isEqualTo(pdfParser.parse(inputStreamForVerify));
     }
 }

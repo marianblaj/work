@@ -31,7 +31,7 @@ public class DocumentDatesTest {
         String in = DocumentDates.getDate(lines);
         System.out.println(in.toString());
 
-            assertThat(in.equals(DocumentDates.getDate(lines)));
+            assertThat(in).isEqualTo(DocumentDates.getDate(lines));
 
     }
 }

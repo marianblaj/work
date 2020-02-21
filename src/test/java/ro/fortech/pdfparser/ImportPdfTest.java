@@ -23,7 +23,7 @@ public class ImportPdfTest {
         ParsedPdfDto in = service.importPdf("/2017 SAS balanta 31122017.pdf");
         System.out.println(in.toString());
 
-            assertThat(in.equals(service.importPdf("/2017 SAS balanta 31122017.pdf")));
+            assertThat(in).isEqualTo(service.importPdf("/2017 SAS balanta 31122017.pdf"));
 
     }
 

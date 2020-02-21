@@ -36,7 +36,7 @@ public class PdfLinesTest {
         ParsedPdfDto in = pdfLines.addPdfLines(lines,dto);
         System.out.println(in.toString());
 
-        assertThat(in.equals(pdfLines.addPdfLines(lines,dto)));
+        assertThat(in).isEqualTo(pdfLines.addPdfLines(lines,dto));
 
     }
     
