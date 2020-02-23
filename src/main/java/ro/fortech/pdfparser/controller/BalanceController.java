@@ -1,6 +1,7 @@
 package ro.fortech.pdfparser.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.bind.annotation.*;
 import ro.fortech.pdfparser.entity.BalanceSheetEntity;
 import ro.fortech.pdfparser.service.ParsedPdfDto;
@@ -8,6 +9,7 @@ import ro.fortech.pdfparser.service.refactor.PdfService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/balance")
@@ -21,9 +23,9 @@ public class BalanceController {
         this.pdfService = pdfService;
     }
 
-    @PostMapping("/add")
-    public void add(@RequestBody String path) throws Exception {
-        pdfService.add2Database(insidePath);
+    @PostMapping("/")
+    public BalanceSheetEntity add(@RequestBody String path) throws Exception {
+        return pdfService.add2Database(insidePath);
     }
 
     @GetMapping("/")

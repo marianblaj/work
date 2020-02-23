@@ -33,4 +33,5 @@ public class BalanceSheetLineEntity {
     private BigDecimal solduriFinaleD;
     private BigDecimal solduriFinaleC;
 
+
 }
