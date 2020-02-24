@@ -5,12 +5,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import ro.fortech.pdfparser.entity.BalanceSheetLineEntity;
 import ro.fortech.pdfparser.repository.BalanceSheetLineRepository;
 import ro.fortech.pdfparser.repository.BalanceSheetRepository;
 import ro.fortech.pdfparser.service.refactor.ImportPdf;
 import ro.fortech.pdfparser.service.refactor.PdfParser;
-
+@EnableAuthorizationServer
 @SpringBootApplication
 public class PdfParserApplication {
 
